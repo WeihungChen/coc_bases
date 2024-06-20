@@ -149,7 +149,7 @@ table {
 
 th {
     padding: 10px;
-    background-color: #007bff;
+    background-color: rgba(0,123,255,0.8);
     font-size: 16px;
     color: white;
     border-radius: 5px;

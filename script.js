@@ -252,6 +252,9 @@ function history_clicked()
         return;
     }
     document.getElementById('modalAttackedImage').src = current_history[this.value].Pic;
+    document.getElementById('attackedName').innerHTML = current_history[this.value].Name;
+    document.getElementById('attackedDate').innerHTML = DateToString(new Date(current_history[this.value].Date)).substring(0,10);
+    document.getElementById('attackedFinalCup').innerHTML = current_history[this.value].Cup;
     document.getElementById('lStar3_attcked').innerHTML = current_history[this.value].Star_3;
     document.getElementById('lStar2_attcked').innerHTML = current_history[this.value].Star_2;
     document.getElementById('lStar1_attcked').innerHTML = current_history[this.value].Star_1;

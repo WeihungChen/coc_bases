@@ -49,11 +49,25 @@
                     <div id="OverAllTab" class="modal-tab-content active">
                         <div class="modal-fixed">
                             <img id="modalImage" src="" alt="">
+                        </div>
+                        <div class="modal-fixed">
                             <table>
-                                <tr><td><img src="Star3.png" class="istar"></td><td><label id="lStar3" class="lstar"></label></td></tr>
-                                <tr><td><img src="Star2.png" class="istar"></td><td><label id="lStar2" class="lstar"></label></td></tr>
-                                <tr><td><img src="Star1.png" class="istar"></td><td><label id="lStar1" class="lstar"></label></td></tr>
-                                <tr><td><img src="Star0.png" class="istar"></td><td><label id="lStar0" class="lstar"></label></td></tr>
+                                <thead>
+                                    <tr>
+                                        <th><img src="Star3.png" class="istar"></th>
+                                        <th><img src="Star2.png" class="istar"></th>
+                                        <th><img src="Star1.png" class="istar"></th>
+                                        <th><img src="Star0.png" class="istar"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><label id="lStar3" class="lstar"></label></td>
+                                        <td><label id="lStar2" class="lstar"></label></td>
+                                        <td><label id="lStar1" class="lstar"></label></td>
+                                        <td><label id="lStar0" class="lstar"></label></td>
+                                    </tr>
+                                </tbody>
                             </table>
                         </div>
                         <button id="modal-LK">Open Link</button>
@@ -102,11 +116,31 @@
                 <div class="modal-body">
                     <div class="modal-fixed">
                         <img id="modalAttackedImage" src="" alt="">
+                    </div>
+                    <div class="modal-fixed">
                         <table>
-                            <tr><td><img src="Star3.png" class="istar"></td><td><label id="lStar3_attcked" class="lstar"></label></td></tr>
-                            <tr><td><img src="Star2.png" class="istar"></td><td><label id="lStar2_attcked" class="lstar"></label></td></tr>
-                            <tr><td><img src="Star1.png" class="istar"></td><td><label id="lStar1_attcked" class="lstar"></label></td></tr>
-                            <tr><td><img src="Star0.png" class="istar"></td><td><label id="lStar0_attcked" class="lstar"></label></td></tr>
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>日期</th>
+                                    <th>盃數</th>
+                                    <th><img src="Star3.png" class="istar"></th>
+                                    <th><img src="Star2.png" class="istar"></th>
+                                    <th><img src="Star1.png" class="istar"></th>
+                                    <th><img src="Star0.png" class="istar"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td id="attackedName" class="history_content"></td>
+                                    <td id="attackedDate" class="history_content"></td>
+                                    <td id="attackedFinalCup" class="history_content"></td>
+                                    <td class="history_content"><label id="lStar3_attcked"></label></td>
+                                    <td class="history_content"><label id="lStar2_attcked" ></label></td>
+                                    <td class="history_content"><label id="lStar1_attcked"></label></td>
+                                    <td class="history_content"><label id="lStar0_attcked"></label></td>
+                                </tr>
+                            </tbody>
                         </table>
                     </div>
                 </div>
