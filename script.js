@@ -3,6 +3,7 @@ import { serverUrl } from "./common/def_global.js";
 import { DateToString, addCommasToNumber, isNumeric } from "./common/globalFunctions.js";
 const apiUrl = serverUrl + "/api";
 var bases = [];
+var current_history = [];
 
 document.getElementById('imageUpload').addEventListener('change', ImgAdd);
 document.getElementById('btnUpload').addEventListener('click', upload);
@@ -100,19 +101,31 @@ async function showBases()
 {
     const table_base = document.getElementById('table_base');
     table_base.innerHTML = '';
+    console.log(bases);
     for(var i=0; i<bases.length; i++)
     {
         const tr = document.createElement('tr');
+        const td1 = document.createElement('td');
         const img = document.createElement('img');
         img.className = "img_display thumbnail";
         img.id = i;
         img.src = bases[i].Pic;
+        img.style.padding = '5px';
         img.addEventListener('click', showDetails);
-        tr.appendChild(img);
+        td1.appendChild(img);
+        td1.style.width = '85%';
+        td1.rowSpan = 2;
+        tr.appendChild(td1);
+        const td2 = document.createElement('td');
+        td2.innerHTML = '攻擊數: ' + (bases[i].sum == null ? 0 : bases[i].sum) + "\n";
+        tr.appendChild(td2);
         const tr1 = document.createElement('tr');
-        tr1.innerHTML = '上傳時間:' + DateToString(new Date(bases[i].UploadTime));
+        tr1.innerHTML = '三星率: ' + (bases[i].Rate_3 == null ? 0 : Math.round(bases[i].Rate_3 * 10000) / 100) + "\n";
+        const tr2 = document.createElement('tr');
+        tr2.innerHTML = '上傳時間:' + DateToString(new Date(bases[i].UploadTime));
         table_base.appendChild(tr);
         table_base.appendChild(tr1);
+        table_base.appendChild(tr2);
     }
 }
 
@@ -138,6 +151,7 @@ async function getBaseDetail(idx)
     s2.innerHTML = '';
     s1.innerHTML = '';
     s0.innerHTML = '';
+    console.log(result[1]);
     if(result[0] == 200)
         return result[1];
     else
@@ -146,7 +160,8 @@ async function getBaseDetail(idx)
             "Star_3": 0,
             "Star_2": 0,
             "Star_1": 0,
-            "Star_0": 0
+            "Star_0": 0,
+            "History": []
         };
     }
 }
@@ -172,11 +187,63 @@ async function getAndModifyDetail(idx)
     const s2 = document.getElementById('lStar2');
     const s1 = document.getElementById('lStar1');
     const s0 = document.getElementById('lStar0');
-    console.log(detail);
+
     s3.innerHTML = detail.Star_3;
     s2.innerHTML = detail.Star_2;
     s1.innerHTML = detail.Star_1;
     s0.innerHTML = detail.Star_0;
+
+    current_history = detail.History;
+
+    const history_table = document.getElementById('history_body');
+    history_table.innerHTML = '';
+    for(var i=0; i<current_history.length; i++)
+    {
+        const row = history_table.insertRow(-1);
+        const cName = row.insertCell(-1);
+        cName.innerHTML = current_history[i].Name;
+        cName.value = i;
+        cName.className = 'history_content';
+        const cDate = row.insertCell(-1);
+        cDate.innerHTML = DateToString(new Date(current_history[i].Date)).substring(0,10);
+        cDate.value = i;
+        cDate.className = 'history_content';
+        const cCup = row.insertCell(-1);
+        cCup.innerHTML = current_history[i].Cup;
+        cCup.value = i;
+        cCup.className = 'history_content';
+        const cStar3 = row.insertCell(-1);
+        cStar3.innerHTML = current_history[i].Star_3;
+        cStar3.value = i;
+        cStar3.className = 'history_content';
+        const cStar2 = row.insertCell(-1);
+        cStar2.innerHTML = current_history[i].Star_2;
+        cStar2.value = i;
+        cStar2.className = 'history_content';
+        const cStar1 = row.insertCell(-1);
+        cStar1.innerHTML = current_history[i].Star_1;
+        cStar1.value = i;
+        cStar1.className = 'history_content';
+        const cStar0 = row.insertCell(-1);
+        cStar0.innerHTML = current_history[i].Star_0;
+        cStar0.value = i;
+        cStar0.className = 'history_content';
+    }
+
+    const objs = document.querySelectorAll('.history_content');
+    for(var i=0; i<objs.length; i++)
+        objs[i].addEventListener('click', history_clicked);
+}
+
+function history_clicked()
+{
+    console.log('history_clicked: ' + this.value);
+    if(this.value >= current_history.length)
+    {
+        alert('Error!!');
+        return;
+    }
+    console.log(current_history[this.value]);
 }
 
 function modalLinkClicked()

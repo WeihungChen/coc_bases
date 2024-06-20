@@ -88,7 +88,7 @@ body {
 }
 
 h1 {
-    margin-top: 10;
+    margin-top: 5;
     color: #333333;
 }
 
@@ -137,6 +137,24 @@ table {
     justify-content: center; /* 在水平方向上居中显示图片 */
     align-items: center; /* 在垂直方向上居中显示图片 */
 }
+
+th {
+    padding: 10px;
+    background-color: #007bff;
+    font-size: 16px;
+    color: white;
+    border-radius: 5px;
+    max-height: 30px;
+    max-width: 50px;
+}
+
+.history_content {
+    background-color: rgba(160,241,255,0.2);
+    padding: 5px;
+    margin: 5px;
+    cursor: pointer;
+}
+
 img {
     max-width: 100%;
     height: auto;
@@ -214,7 +232,7 @@ img {
 }
 
 .thumbnail:hover {
-    transform: scale(1.05);
+    transform: scale(1.02);
 }
 
 .modal {
@@ -233,7 +251,7 @@ img {
     background-color: #fefefe;
     margin: 10% auto;
     padding: 20px;
-    max-width: 80%;
+    max-width: 90%;
     position: relative;
     text-align: center;
     border-radius: 8px;
@@ -254,7 +272,7 @@ img {
 }
 
 .modal-body {
-    padding-top: 50px; /* Adjust to leave space for header */
+    padding-top: 40px; /* Adjust to leave space for header */
     text-align: center;
     align-items: center;
     justify-content: center;
@@ -316,6 +334,7 @@ img {
     align-items: center;
     justify-content: center;
     display: flex;
+    margin-bottom: 10px;
 }
 
 .attacked-img {
