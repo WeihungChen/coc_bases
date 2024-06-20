@@ -121,11 +121,20 @@ button:hover {
 }
 
 .img_display {
-    max-height: 300px;
+    max-height: 400px;
     overflow: hidden;
     display: flex;
     justify-content: center; /* 在水平方向上居中显示图片 */
     align-items: center; /* 在垂直方向上居中显示图片 */
+}
+
+.base_middle {
+    background-color: rgba(0, 123, 255, 0.2);
+}
+
+.base_bottom {
+    background-color: rgba(0, 123, 255, 0.2);
+    border-bottom: 1px solid black;
 }
 
 .baseTable {

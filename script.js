@@ -114,16 +114,23 @@ async function showBases()
         img.style.padding = '5px';
         img.addEventListener('click', showDetails);
         td1.appendChild(img);
+        td1.colSpan = 2;
         td1.style.width = '85%';
-        td1.rowSpan = 2;
         tr.appendChild(td1);
-        const td2 = document.createElement('td');
-        td2.innerHTML = '攻擊數: ' + (bases[i].sum == null ? 0 : bases[i].sum) + "\n";
-        tr.appendChild(td2);
         const tr1 = document.createElement('tr');
-        tr1.innerHTML = '三星率: ' + (bases[i].Rate_3 == null ? 0 : Math.round(bases[i].Rate_3 * 10000) / 100) + "\n";
+        const td2 = document.createElement('td');
+        td2.innerHTML = '攻擊數: ' + (bases[i].sum == null ? 0 : bases[i].sum);
+        tr1.appendChild(td2);
+        const td3 = document.createElement('td');
+        td3.innerHTML = '三星率: ' + (bases[i].Rate_3 == null ? 0 : Math.round(bases[i].Rate_3 * 10000) / 100) + ' %';
+        tr1.appendChild(td3);
+        tr1.className = 'base_middle';
         const tr2 = document.createElement('tr');
-        tr2.innerHTML = '上傳時間:' + DateToString(new Date(bases[i].UploadTime));
+        const td4 = document.createElement('td');
+        td4.innerHTML = '上傳時間:' + DateToString(new Date(bases[i].UploadTime));
+        td4.colSpan = 2;
+        tr2.appendChild(td4);
+        tr2.className = 'base_bottom';
         table_base.appendChild(tr);
         table_base.appendChild(tr1);
         table_base.appendChild(tr2);
@@ -251,7 +258,6 @@ function history_clicked()
     document.getElementById('lStar0_attcked').innerHTML = current_history[this.value].Star_0;
     const modal_attacked = document.getElementById('modal_attacked');
     modal_attacked.style.display = 'block';
-    console.log(current_history[this.value]);
 }
 
 function modalLinkClicked()
