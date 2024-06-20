@@ -278,20 +278,20 @@ img {
 }
 
 .lstar {
-    font-size: 48px;
+    font-size: 26px;
     max-width: 50px;
 }
 
 .r_label {
     width: 150px;
-    font-size: 30px;
+    font-size: 20px;
     border-radius: 10px;
     background-color: rgba(143, 199, 255, 0.3);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 .r {
-    font-size: 30px;
+    font-size: 20px;
     width: 300px;
     border-radius: 10px;
     text-align: center;
@@ -304,7 +304,7 @@ img {
     color: white;
     border-radius: 8px;
     cursor: pointer;
-    font-size: 30px;
+    font-size: 20px;
 }
 
 #modal-add-record {
