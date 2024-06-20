@@ -267,6 +267,10 @@ img {
     display: flex;
 }
 
+#modalImage {
+    max-width: 70vh;
+}
+
 .stars {
     display: flex;
     align-items: center;
@@ -274,41 +278,47 @@ img {
 }
 
 .istar {
+    width: 50px;
     max-height: 50px;
 }
 
 .lstar {
-    font-size: 26px;
+    font-size: 18px;
     max-width: 50px;
 }
 
 .r_label {
-    width: 150px;
-    font-size: 20px;
+    width: 30vh;
+    max-width: 100px;
+    font-size: 18px;
     border-radius: 10px;
     background-color: rgba(143, 199, 255, 0.3);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 .r {
-    font-size: 20px;
-    width: 300px;
+    font-size: 18px;
+    width: 50vh;
     border-radius: 10px;
     text-align: center;
 }
 
+.add_table {
+    width: 80vh;
+}
+
 .modal-sub {
-    width: 465px;
+    width: 80vh;
     height: 40px;
     background-color: #007bff;
     color: white;
     border-radius: 8px;
     cursor: pointer;
-    font-size: 20px;
+    font-size: 18px;
 }
 
 #modal-add-record {
-    width: 465px;
+    width: 200px;
 }
 
 .flex-table {
@@ -319,6 +329,6 @@ img {
 }
 
 .attacked-img {
-    max-width: 450px;
+    max-width: 80vh;
     max-height: 300px;
 }
