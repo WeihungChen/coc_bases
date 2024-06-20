@@ -12,6 +12,7 @@ document.getElementById('modal-add').addEventListener('click', tabAdd);
 document.getElementById('modal-LK').addEventListener('click', modalLinkClicked);
 document.getElementById('modal-add-record').addEventListener('click', modalAddRecord);
 document.getElementById('attackedImg').addEventListener('change', AttackedImgAdd);
+document.getElementById('close_attacked').addEventListener('click', closeAttackedModal);
 
 document.addEventListener("DOMContentLoaded", function() {
     const tabs = document.querySelectorAll(".tab");
@@ -243,6 +244,13 @@ function history_clicked()
         alert('Error!!');
         return;
     }
+    document.getElementById('modalAttackedImage').src = current_history[this.value].Pic;
+    document.getElementById('lStar3_attcked').innerHTML = current_history[this.value].Star_3;
+    document.getElementById('lStar2_attcked').innerHTML = current_history[this.value].Star_2;
+    document.getElementById('lStar1_attcked').innerHTML = current_history[this.value].Star_1;
+    document.getElementById('lStar0_attcked').innerHTML = current_history[this.value].Star_0;
+    const modal_attacked = document.getElementById('modal_attacked');
+    modal_attacked.style.display = 'block';
     console.log(current_history[this.value]);
 }
 
@@ -307,6 +315,12 @@ async function modalAddRecord()
 
 function closeModal() {
     const modal = document.getElementById('modal');
+    modal.style.display = 'none';
+}
+
+function closeAttackedModal()
+{
+    const modal = document.getElementById('modal_attacked');
     modal.style.display = 'none';
 }
 
