@@ -356,13 +356,22 @@ async function modalAddRecord()
         alert('請填寫完整資料！');
         return;
     }
-    if(imageUpload.files.length == 0)
+    if(parseInt(star3) < 0 || parseInt(star2) < 0 || parseInt(star1) < 0 || parseInt(star0) < 0)
+    {
+        alert('場數異常！');
+        return;
+    }
+    const total = parseInt(star3) + parseInt(star2) + parseInt(star1) + parseInt(star0);
+    if(total > 0 && imageUpload.files.length == 0)
     {
         alert('請上傳防守圖！');
         return;
     }
     const formData = new FormData();
-    formData.append('file', imageUpload.files[0]);
+    if(imageUpload.files.length > 0)
+        formData.append('file', imageUpload.files[0]);
+    else
+        formData.append('file', null);
     formData.append('BaseID', bases[this.value].ID);
     formData.append('Name', name);
     formData.append('Date', dt);
