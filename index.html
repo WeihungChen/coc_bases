@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Clash of Clans陣型</title>
+    <link rel="Shortcut Icon" type="image/x-icon" href="./favicon.ico" />
     <link rel="stylesheet" href="main/styles.css">
     <script type="module" src="main/script.js"></script>
 </head>
@@ -20,18 +21,18 @@
                 <div class="flex-table">
                     <table id="select_table">
                         <tr>
-                            <td colspan="4"><div class="custom-select"><select id="select_base"></select></div></td>
+                            <td colspan="4"><div class="custom-select"><select id="select_base" style="background-color: rgba(114, 170, 255, 0.2)"></select></div></td>
                         </tr>
+                        <tr><td colspan="4" style="color:white;font-size:4px;">_</td></tr>
+                        <tr><td id="select_td" colspan="4"><label class="label1">盃段</label></td></tr>
                         <tr>
-                            <td id="select_td"><h1>盃段:</h1></td>
-                            <td><div class="custom-select"><select id="select_cup1"></select></div></td>
-                            <td><h1>~</h1></td>
-                            <td><div class="custom-select"><select id="select_cup2"></select></div></td>
+                            <td><div class="custom-select"><select id="select_cup1" style="background-color: rgba(114, 255, 255,0.2)"></select></div></td>
+                            <td><h2>~</h2></td>
+                            <td><div class="custom-select"><select id="select_cup2" style="background-color: rgba(114, 255, 255,0.2)"></select></div></td>
                         </tr>
+                        <tr><td colspan="4"><label class="label1">Bases</label></td></tr>
                     </table>
                 </div>
-                
-                <h1>Bases</h1>
                 <div class="baseTable"><table id="table_base"></table></div>
             </div>
             <div id="UploadTab" class="tab-content">
@@ -73,10 +74,10 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td><label id="lStar3" class="lstar"></label></td>
-                                        <td><label id="lStar2" class="lstar"></label></td>
-                                        <td><label id="lStar1" class="lstar"></label></td>
-                                        <td><label id="lStar0" class="lstar"></label></td>
+                                        <td style="background-color: rgba(160,241,255,0.2);"><label id="lStar3" class="lstar"></label></td>
+                                        <td style="background-color: rgba(160,241,255,0.2);"><label id="lStar2" class="lstar"></label></td>
+                                        <td style="background-color: rgba(160,241,255,0.2);"><label id="lStar1" class="lstar"></label></td>
+                                        <td style="background-color: rgba(160,241,255,0.2);"><label id="lStar0" class="lstar"></label></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -90,10 +91,10 @@
                                 <tr class="modal-add-items" style="display: none"><td class="r_label">Name</td><td><input id="name_r" class="r"></td></tr>
                                 <tr class="modal-add-items" style="display: none"><td class="r_label">日期</td><td><input type="date" id="date_r" class="r"></td></tr>
                                 <tr class="modal-add-items" style="display: none"><td class="r_label">配對盃數</td><td><input type="number" id="cup_r" class="r"></td></tr>
-                                <tr class="modal-add-items" style="display: none"><td><img src="Star3.png" class="r_label"></td><td><input type="number" id="lStar3_r" class="r"></td></tr>
-                                <tr class="modal-add-items" style="display: none"><td><img src="Star2.png" class="r_label"></td><td><input type="number" id="lStar2_r" class="r"></td></tr>
-                                <tr class="modal-add-items" style="display: none"><td><img src="Star1.png" class="r_label"></td><td><input type="number" id="lStar1_r" class="r"></td></tr>
-                                <tr class="modal-add-items" style="display: none"><td><img src="Star0.png" class="r_label"></td><td><input type="number" id="lStar0_r" class="r"></td></tr>
+                                <tr class="modal-add-items" style="display: none"><td><img src="Star3.png" class="r_label"></td><td><input type="number" id="lStar3_r" class="r" value="0"></td></tr>
+                                <tr class="modal-add-items" style="display: none"><td><img src="Star2.png" class="r_label"></td><td><input type="number" id="lStar2_r" class="r" value="0"></td></tr>
+                                <tr class="modal-add-items" style="display: none"><td><img src="Star1.png" class="r_label"></td><td><input type="number" id="lStar1_r" class="r" value="0"></td></tr>
+                                <tr class="modal-add-items" style="display: none"><td><img src="Star0.png" class="r_label"></td><td><input type="number" id="lStar0_r" class="r" value="0"></td></tr>
                                 <tr class="modal-add-items" style="display: none"><td class="r_label">防守圖</td><td><input type="file" id="attackedImg" class="r" accept="image/*"></td></tr>
                                 <tr class="modal-add-items" style="display: none"><td colspan="2"><div id="attacked_img_display" class="attacked-img"></div></td></tr>
                                 <tr class="modal-add-items" style="display: none"><td colspan="2"><button id="modal-add-record">送出</button></td></tr>
@@ -126,7 +127,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="modal-fixed">
-                        <img id="modalAttackedImage" src="" alt="">
+                        <img id="modalAttackedImage" class="attacked-img" src="" alt="">
                     </div>
                     <div class="modal-fixed">
                         <table>
