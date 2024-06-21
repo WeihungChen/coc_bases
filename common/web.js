@@ -46,7 +46,7 @@ async function fetchPostWithToken(url, body, user, contentType)
 		return [res.status, {}, res.statusText];
 	}
 	var result = await res.json();
-	if(res.status != 200 && result.error != null)
+	if(res.status == 303 && result.error != null)
 	{
 		if(result.error.String != null)
 			alert(result.error.String);

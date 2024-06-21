@@ -17,9 +17,20 @@
         </div>
         <div class="tab-contents">
             <div id="BasesTab" class="tab-content active">
-                <div class="custom-select">
-                    <select id="select_base"></select>
+                <div class="flex-table">
+                    <table id="select_table">
+                        <tr>
+                            <td colspan="4"><div class="custom-select"><select id="select_base"></select></div></td>
+                        </tr>
+                        <tr>
+                            <td id="select_td"><h1>盃段:</h1></td>
+                            <td><div class="custom-select"><select id="select_cup1"></select></div></td>
+                            <td><h1>~</h1></td>
+                            <td><div class="custom-select"><select id="select_cup2"></select></div></td>
+                        </tr>
+                    </table>
                 </div>
+                
                 <h1>Bases</h1>
                 <div class="baseTable"><table id="table_base"></table></div>
             </div>

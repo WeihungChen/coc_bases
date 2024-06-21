@@ -13,12 +13,12 @@ document.getElementById('modal-LK').addEventListener('click', modalLinkClicked);
 document.getElementById('modal-add-record').addEventListener('click', modalAddRecord);
 document.getElementById('attackedImg').addEventListener('change', AttackedImgAdd);
 document.getElementById('close_attacked').addEventListener('click', closeAttackedModal);
+document.getElementById('select_cup1').addEventListener('change', selectCupChanged);
+document.getElementById('select_cup2').addEventListener('change', selectCupChanged);
 
 document.addEventListener("DOMContentLoaded", function() {
     const tabs = document.querySelectorAll(".tab");
     const tabContents = document.querySelectorAll(".tab-content");
-    console.log(tabs);
-    console.log(tabContents);
 
     tabs.forEach(tab => {
         tab.addEventListener("click", function() {
@@ -73,9 +73,50 @@ async function Init()
         opt.innerHTML = ths[i].TH;
         select_base.appendChild(opt);
     }
+    const max_cup = Math.ceil(result[1].CupLimit[0].max / 100) * 100;
+    const min_cup = Math.floor(result[1].CupLimit[0].min / 100) * 100;
+    var cur_cup = min_cup;
+    const select_cup1 = document.getElementById('select_cup1');
+    select_cup1.innerHTML = '';
+    const select_cup2 = document.getElementById('select_cup2');
+    select_cup2.innerHTML = '';
+    while(cur_cup <= max_cup)
+    {
+        const opt_l = document.createElement('option');
+        opt_l.value = cur_cup;
+        opt_l.innerHTML = cur_cup;
+        select_cup1.appendChild(opt_l);
+        const opt_r = document.createElement('option');
+        opt_r.value = cur_cup;
+        opt_r.innerHTML = cur_cup;
+        select_cup2.appendChild(opt_r);
+        cur_cup += 100;
+    }
+    select_cup2.selectedIndex = select_cup2.options.length - 1;
     bases = result[1].Bases;
     showBases();
     document.getElementById('select_base').addEventListener('change', select_base_changed);
+}
+
+async function selectCupChanged()
+{
+    const base = document.getElementById('select_base').value;
+    const cup1 = document.getElementById('select_cup1').value;
+    const cup2 = document.getElementById('select_cup2').value;
+    var content = {
+        "method": "th_change",
+        "data": {
+            "TH": base,
+            "Max_Cup": Math.max(cup1, cup2),
+            "Min_Cup": Math.min(cup1, cup2)
+        }
+    };
+    var result = await fetchPost(apiUrl, content, 'application/json');
+    if(result[0] != 200 || result[1] == null || result[1].Bases == null)
+        return;
+
+    bases = result[1].Bases;
+    showBases();
 }
 
 async function select_base_changed()
@@ -83,14 +124,17 @@ async function select_base_changed()
     if(this.value == '')
         return;
 
+    const cup1 = document.getElementById('select_cup1').value;
+    const cup2 = document.getElementById('select_cup2').value;
     var content = {
         "method": "th_change",
         "data": {
-            "TH": this.value
+            "TH": this.value,
+            "Max_Cup": Math.max(cup1, cup2),
+            "Min_Cup": Math.min(cup1, cup2)
         }
     };
     var result = await fetchPost(apiUrl, content, 'application/json');
-    console.log(result);
     if(result[0] != 200 || result[1] == null || result[1].Bases == null)
         return;
 
@@ -102,7 +146,6 @@ async function showBases()
 {
     const table_base = document.getElementById('table_base');
     table_base.innerHTML = '';
-    console.log(bases);
     for(var i=0; i<bases.length; i++)
     {
         const tr = document.createElement('tr');
@@ -144,10 +187,14 @@ async function getBaseDetail(idx)
         alert('Error occurred!');
         return;
     }
+    const cup1 = document.getElementById('select_cup1').value;
+    const cup2 = document.getElementById('select_cup2').value;
     var content = {
         "method": "get_base_detail",
         "data": {
-            "BaseID": bases[idx].ID
+            "BaseID": bases[idx].ID,
+            "Max_Cup": Math.max(cup1, cup2),
+            "Min_Cup": Math.min(cup1, cup2)
         }
     };
     var result = await fetchPost(apiUrl, content, 'application/json');
@@ -159,7 +206,6 @@ async function getBaseDetail(idx)
     s2.innerHTML = '';
     s1.innerHTML = '';
     s0.innerHTML = '';
-    console.log(result[1]);
     if(result[0] == 200)
         return result[1];
     else
@@ -245,7 +291,6 @@ async function getAndModifyDetail(idx)
 
 function history_clicked()
 {
-    console.log('history_clicked: ' + this.value);
     if(this.value >= current_history.length)
     {
         alert('Error!!');
@@ -319,6 +364,25 @@ async function modalAddRecord()
         const modalLink = document.getElementById('modal-LK');
         getAndModifyDetail(modalLink.value);
         alert('最新數據已更新');
+    }
+    else if(result[0] == 300)
+    {
+        if(confirm(result[2] + '\n是否覆蓋紀錄？'))
+        {
+            CoverPreviousRecord(formData);
+        }
+    }
+}
+
+async function CoverPreviousRecord(formData)
+{
+    var content = formData;
+    var result = await fetchPost(apiUrl + '/cover_previous_record', content);
+    if(result[0] == 200)
+    {
+        const modalLink = document.getElementById('modal-LK');
+        getAndModifyDetail(modalLink.value);
+        alert('數據已更新');
     }
 }
 
