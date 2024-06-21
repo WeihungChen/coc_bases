@@ -180,6 +180,13 @@ th {
     max-width: 50px;
 }
 
+.person_history {
+    background-color: rgba(160,241,255,0.2);
+    padding: 5px;
+    margin: 5px;
+    cursor: pointer;
+}
+
 .history_content {
     background-color: rgba(160,241,255,0.2);
     padding: 5px;
@@ -238,7 +245,13 @@ img {
 
 #select_base {
     text-align: center;
-    margin-top: 20px;
+    margin-top: 10px;
+    font-size: 18px;
+}
+
+#select_person {
+    text-align: center;
+    margin-top: 10px;
     font-size: 18px;
 }
 

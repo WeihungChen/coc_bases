@@ -14,6 +14,7 @@
             <div class="tabs">
                 <div id="tabBases" class="tab active">Bases</div>
                 <div id="tabUpload" class="tab">Upload</div>
+                <div id="tabPerson" class="tab">Personal</div>
             </div>
         </div>
         <div class="tab-contents">
@@ -44,6 +45,34 @@
                 <input type="text" id="linkInput" placeholder="Enter COC base link...">
                 <button id="btnUpload">Upload</button>
                 <div id="displayArea" class="img_display"></div>
+            </div>
+            <div id="PersonTab" class="tab-content">
+                <div class="flex-table">
+                    <table id="select_table">
+                        <tr>
+                            <td><div class="custom-select"><select id="select_person" style="background-color: rgba(114, 170, 255, 0.2)"></select></div></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="modal-fixed">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>日期</th>
+                                                <th>盃數</th>
+                                                <th><img src="Star3.png" class="istar"></th>
+                                                <th><img src="Star2.png" class="istar"></th>
+                                                <th><img src="Star1.png" class="istar"></th>
+                                                <th><img src="Star0.png" class="istar"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="personal_history_body"></tbody>
+                                    </table>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
             </div>
         </div>
         <div id="modal" class="modal">
