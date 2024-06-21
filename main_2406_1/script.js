@@ -53,7 +53,9 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 
+InitInputObj();
 Init();
+
 async function Init()
 {
     var content = {
@@ -96,6 +98,18 @@ async function Init()
     bases = result[1].Bases;
     showBases();
     document.getElementById('select_base').addEventListener('change', select_base_changed);
+}
+
+function InitInputObj()
+{
+    const objs = document.querySelectorAll('input');
+    for(var i=0; i<objs.length; i++)
+        objs[i].addEventListener('focus', SelectALL);
+}
+
+function SelectALL()
+{
+    this.select();
 }
 
 async function selectCupChanged()
