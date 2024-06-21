@@ -98,6 +98,7 @@ async function Init()
     select_cup2.selectedIndex = select_cup2.options.length - 1;
 
     const select_person = document.getElementById('select_person');
+    select_person.innerHTML = '';
     const people = result[1].People;
     for(var i=0; i<people.length; i++)
     {
