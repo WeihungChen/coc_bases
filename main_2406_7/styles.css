@@ -21,6 +21,7 @@ body {
 }
 
 .tabs-container {
+    padding: 10px;
     display: flex;
     justify-content: center; /* 居中显示选项卡 */
 }
@@ -344,6 +345,12 @@ img {
     align-items: center;
     justify-content: center;
     display: flex;
+}
+
+#personal_attacked_img_div {
+    text-align: center;
+    align-items: center;
+    justify-content: center;
 }
 
 .stars {
