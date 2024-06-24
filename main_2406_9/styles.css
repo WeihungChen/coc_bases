@@ -195,6 +195,12 @@ th {
     cursor: pointer;
 }
 
+.history_content_n_click {
+    background-color: rgba(160,241,255,0.2);
+    padding: 5px;
+    margin: 5px;
+}
+
 img {
     max-width: 100%;
     height: auto;
