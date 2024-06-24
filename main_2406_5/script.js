@@ -146,6 +146,10 @@ async function SelectPersonChanged()
             cCup.innerHTML = his[i].Cup;
             cCup.value = his[i].BaseID;
             cCup.className = 'person_history';
+            const cReduceTrophy = row.insertCell(-1);
+            cReduceTrophy.innerHTML = his[i].ReduceTrophy == null ? '-' : his[i].ReduceTrophy;
+            cReduceTrophy.value = his[i].BaseID;
+            cReduceTrophy.className = 'person_history';
             const cStar3 = row.insertCell(-1);
             cStar3.innerHTML = his[i].Star_3;
             cStar3.value = his[i].BaseID;
@@ -177,6 +181,7 @@ function personalHistoryClicked()
     const modalLink = document.getElementById('modal-LK');
     const modalAdd = document.getElementById('modal-add-record');
 
+    document.getElementById('tabOverAll').dispatchEvent(new Event('click'));
     modal.style.display = 'block';
     modalImage.src = bases[idx].Pic;
     modalLink.value = idx;
@@ -357,6 +362,10 @@ async function getAndModifyDetail(idx)
         cCup.innerHTML = current_history[i].Cup;
         cCup.value = i;
         cCup.className = 'history_content';
+        const cReduceTrophy = row.insertCell(-1);
+        cReduceTrophy.innerHTML = current_history[i].ReduceTrophy == null ? '-' : current_history[i].ReduceTrophy;
+        cReduceTrophy.value = i;
+        cReduceTrophy.className = 'history_content';
         const cStar3 = row.insertCell(-1);
         cStar3.innerHTML = current_history[i].Star_3;
         cStar3.value = i;
@@ -387,10 +396,12 @@ function history_clicked()
         alert('Error!!');
         return;
     }
+    console.log(current_history);
     document.getElementById('modalAttackedImage').src = current_history[this.value].Pic;
     document.getElementById('attackedName').innerHTML = current_history[this.value].Name;
     document.getElementById('attackedDate').innerHTML = DateToString(new Date(current_history[this.value].Date)).substring(0,10);
-    document.getElementById('attackedFinalCup').innerHTML = current_history[this.value].Cup;
+    document.getElementById('attackedPairedCup').innerHTML = current_history[this.value].Cup;
+    document.getElementById('attackedReduceTrophy').innerHTML = current_history[this.value].ReduceTrophy == null ? '-' : current_history[this.value].ReduceTrophy;
     document.getElementById('lStar3_attcked').innerHTML = current_history[this.value].Star_3;
     document.getElementById('lStar2_attcked').innerHTML = current_history[this.value].Star_2;
     document.getElementById('lStar1_attcked').innerHTML = current_history[this.value].Star_1;
@@ -414,12 +425,13 @@ async function modalAddRecord()
     const name = document.getElementById('name_r').value;
     const dt = document.getElementById('date_r').value;
     const cup = document.getElementById('cup_r').value;
+    const reduce_trophy = document.getElementById('reduce_trophy_r').value;
     const star3 = document.getElementById('lStar3_r').value;
     const star2 = document.getElementById('lStar2_r').value;
     const star1 = document.getElementById('lStar1_r').value;
     const star0 = document.getElementById('lStar0_r').value;
     const imageUpload = document.getElementById('attackedImg');
-    if(cup == '' || !isNumeric(cup))
+    if(cup == '' || !isNumeric(cup) || reduce_trophy == '' || !isNumeric(reduce_trophy))
     {
         alert('請填寫正確盃數！');
         return;
@@ -453,6 +465,7 @@ async function modalAddRecord()
     formData.append('Name', name);
     formData.append('Date', dt);
     formData.append('Cup', cup);
+    formData.append('ReduceTrophy', reduce_trophy);
     formData.append('Star_3', star3);
     formData.append('Star_2', star2);
     formData.append('Star_1', star1);
