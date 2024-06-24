@@ -13,8 +13,8 @@
         <div class="tabs-container">
             <div class="tabs">
                 <div id="tabBases" class="tab active">Bases</div>
-                <div id="tabUpload" class="tab">Upload</div>
                 <div id="tabPerson" class="tab">Personal</div>
+                <div id="tabUpload" class="tab">Upload</div>
             </div>
         </div>
         <div class="tab-contents">
@@ -35,16 +35,6 @@
                     </table>
                 </div>
                 <div class="baseTable"><table id="table_base"></table></div>
-            </div>
-            <div id="UploadTab" class="tab-content">
-                <h1>Upload Base Image and Link</h1>
-                <label for="imageUpload" class="custom-file-upload">
-                    Choose the base image
-                </label>
-                <input type="file" id="imageUpload" accept="image/*" style="display: none;">
-                <input type="text" id="linkInput" placeholder="Enter COC base link...">
-                <button id="btnUpload">Upload</button>
-                <div id="displayArea" class="img_display"></div>
             </div>
             <div id="PersonTab" class="tab-content">
                 <div class="flex-table">
@@ -75,6 +65,16 @@
                     </table>
                 </div>
             </div>
+            <div id="UploadTab" class="tab-content">
+                <h1>Upload Base Image and Link</h1>
+                <label for="imageUpload" class="custom-file-upload">
+                    Choose the base image
+                </label>
+                <input type="file" id="imageUpload" accept="image/*" style="display: none;">
+                <input type="text" id="linkInput" placeholder="Enter COC base link...">
+                <button id="btnUpload">Upload</button>
+                <div id="displayArea" class="img_display"></div>
+            </div>
         </div>
         <div id="modal" class="modal">
             <div class="modal-content">
@@ -82,6 +82,24 @@
                     x
                 </div>
                 <div class="modal-body">
+                    <div class="modal-fixed" id="personal_attacked_img_div">
+                        <table>
+                            <thead>
+                                <th>Name</th>
+                                <th>日期</th>
+                                <th>盃數</th>
+                                <th>扣盃</th>
+                            </thead>
+                            <tr>
+                                <td class="history_content" id="personal_clicked_name"></td>
+                                <td class="history_content" id="personal_clicked_date"></td>
+                                <td class="history_content" id="personal_clicked_cup"></td>
+                                <td class="history_content" id="personal_clicked_reducetrophy"></td>
+                            </tr>
+                            <tr><td colspan="4"><img id="personal_attacked_img" src="" alt="" style="max-height: 300px;"></td></tr>
+                        </table>
+                    </div>
+                    
                     <div class="tabs-container">
                         <div class="tabs">
                             <div id="tabOverAll" class="modal-tab active">OverAll</div>

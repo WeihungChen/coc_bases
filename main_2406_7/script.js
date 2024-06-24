@@ -131,7 +131,6 @@ async function SelectPersonChanged()
         }
     };
     var result = await fetchPost(apiUrl, content, 'application/json');
-    console.log(result);
     if(result[0] == 200)
     {
         const his = result[1].His;
@@ -139,32 +138,39 @@ async function SelectPersonChanged()
         {
             const row = personal_history_body.insertRow(-1);
             const cDate = row.insertCell(-1);
+            cDate.id = 'person_' + i + '_date';
             cDate.innerHTML = DateToString(new Date(his[i].Date)).substring(0,10);
-            cDate.value = his[i].BaseID;
+            cDate.value = his[i].BaseID + "_" + his[i].Pic;
             cDate.className = 'person_history';
             const cCup = row.insertCell(-1);
+            cCup.id = 'person_' + i + "_cup";
             cCup.innerHTML = his[i].Cup;
-            cCup.value = his[i].BaseID;
+            cCup.value = his[i].BaseID + "_" + his[i].Pic;
             cCup.className = 'person_history';
             const cReduceTrophy = row.insertCell(-1);
+            cReduceTrophy.id = 'person_' + i + "_reducetrophy";
             cReduceTrophy.innerHTML = his[i].ReduceTrophy == null ? '-' : his[i].ReduceTrophy;
-            cReduceTrophy.value = his[i].BaseID;
+            cReduceTrophy.value = his[i].BaseID + "_" + his[i].Pic;
             cReduceTrophy.className = 'person_history';
             const cStar3 = row.insertCell(-1);
+            cStar3.id = 'person_' + i + "_star3";
             cStar3.innerHTML = his[i].Star_3;
-            cStar3.value = his[i].BaseID;
+            cStar3.value = his[i].BaseID + "_" + his[i].Pic;
             cStar3.className = 'person_history';
             const cStar2 = row.insertCell(-1);
+            cStar2.id = 'person_' + i + "_star2";
             cStar2.innerHTML = his[i].Star_2;
-            cStar2.value = his[i].BaseID;
+            cStar2.value = his[i].BaseID + "_" + his[i].Pic;
             cStar2.className = 'person_history';
             const cStar1 = row.insertCell(-1);
+            cStar1.id = 'person_' + i + "_star1";
             cStar1.innerHTML = his[i].Star_1;
-            cStar1.value = his[i].BaseID;
+            cStar1.value = his[i].BaseID + "_" + his[i].Pic;
             cStar1.className = 'person_history';
             const cStar0 = row.insertCell(-1);
+            cStar0.id = 'person_' + i + "_star0";
             cStar0.innerHTML = his[i].Star_0;
-            cStar0.value = his[i].BaseID;
+            cStar0.value = his[i].BaseID + "_" + his[i].Pic;
             cStar0.className = 'person_history';
         }
         const objs = document.querySelectorAll('.person_history');
@@ -175,18 +181,32 @@ async function SelectPersonChanged()
 
 function personalHistoryClicked()
 {
-    const idx = bases.findIndex(obj => obj.ID == this.value);
+    const baseID = this.value.split('_')[0];
+    const baseidx = bases.findIndex(obj => obj.ID == baseID);
+    const pic = this.value.split('_')[1];
     const modal = document.getElementById('modal');
     const modalImage = document.getElementById('modalImage');
     const modalLink = document.getElementById('modal-LK');
     const modalAdd = document.getElementById('modal-add-record');
 
+    const idx = this.id.split('_')[1];
+    const name = document.getElementById('select_person').value;
+    const date = document.getElementById('person_' + idx + '_date').innerHTML;
+    const cup = document.getElementById('person_' + idx + '_cup').innerHTML;
+    const reducetrophy = document.getElementById('person_' + idx + '_reducetrophy').innerHTML;
+    document.getElementById('personal_clicked_name').innerHTML = name;
+    document.getElementById('personal_clicked_date').innerHTML = date;
+    document.getElementById('personal_clicked_cup').innerHTML = cup;
+    document.getElementById('personal_clicked_reducetrophy').innerHTML = reducetrophy;
+
+    document.getElementById('personal_attacked_img_div').style.display = 'flex';
+    document.getElementById('personal_attacked_img').src = pic;
     document.getElementById('tabOverAll').dispatchEvent(new Event('click'));
     modal.style.display = 'block';
-    modalImage.src = bases[idx].Pic;
-    modalLink.value = idx;
-    modalAdd.value = idx;
-    getAndModifyDetail(idx);
+    modalImage.src = bases[baseidx].Pic;
+    modalLink.value = baseidx;
+    modalAdd.value = baseidx;
+    getAndModifyDetail(baseidx);
 }
 
 function SelectALL()
@@ -324,6 +344,7 @@ async function showDetails()
     const modalAdd = document.getElementById('modal-add-record');
 
     modal.style.display = 'block';
+    document.getElementById('personal_attacked_img_div').style.display = 'none';
     modalImage.src = this.src;
     modalLink.value = this.id;
     modalAdd.value = this.id;
@@ -396,7 +417,6 @@ function history_clicked()
         alert('Error!!');
         return;
     }
-    console.log(current_history);
     document.getElementById('modalAttackedImage').src = current_history[this.value].Pic;
     document.getElementById('attackedName').innerHTML = current_history[this.value].Name;
     document.getElementById('attackedDate').innerHTML = DateToString(new Date(current_history[this.value].Date)).substring(0,10);
