@@ -496,6 +496,7 @@ async function modalAddRecord()
     {
         const modalLink = document.getElementById('modal-LK');
         getAndModifyDetail(modalLink.value);
+        document.getElementById('select_person').dispatchEvent(new Event('change'));
         alert('最新數據已更新');
     }
     else if(result[0] == 300)
@@ -515,6 +516,7 @@ async function CoverPreviousRecord(formData)
     {
         const modalLink = document.getElementById('modal-LK');
         getAndModifyDetail(modalLink.value);
+        document.getElementById('select_person').dispatchEvent(new Event('change'));
         alert('數據已更新');
     }
 }
