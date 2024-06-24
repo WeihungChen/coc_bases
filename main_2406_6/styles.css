@@ -15,7 +15,7 @@ body {
     background-color: #ffffff;
     border-radius: 12px; /* Rounded corners for the container */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Slightly raised shadow for depth */
-    width: 80%;
+    width: 90%;
     height: 95vh;
     max-width: 800px;
 }
