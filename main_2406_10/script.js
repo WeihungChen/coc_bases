@@ -1,4 +1,4 @@
-import { fetchPost } from "./common/web.js";
+import { fetchPost, fetchGetJson } from "./common/web.js";
 import { serverUrl } from "./common/def_global.js";
 import { DateToString, addCommasToNumber, isNumeric } from "./common/globalFunctions.js";
 const apiUrl = serverUrl + "/api";
@@ -16,6 +16,9 @@ document.getElementById('close_attacked').addEventListener('click', closeAttacke
 document.getElementById('select_cup1').addEventListener('change', selectCupChanged);
 document.getElementById('select_cup2').addEventListener('change', selectCupChanged);
 document.getElementById('select_person').addEventListener('change', SelectPersonChanged);
+document.getElementById('name_r').addEventListener('change', cal_stars_and_trophy);
+document.getElementById('tag_r').addEventListener('change', cal_stars_and_trophy);
+document.getElementById('date_r').addEventListener('change', cal_stars_and_trophy);
 
 document.addEventListener("DOMContentLoaded", function() {
     const tabs = document.querySelectorAll(".tab");
@@ -57,6 +60,7 @@ document.addEventListener("DOMContentLoaded", function() {
 InitInputObj();
 Init();
 
+var players = new Map();
 async function Init()
 {
     var content = {
@@ -102,6 +106,7 @@ async function Init()
     const people = result[1].People;
     for(var i=0; i<people.length; i++)
     {
+        players[people[i].Name] = people[i].Tag;
         const opt_p = document.createElement('option');
         opt_p.value = people[i].Name;
         opt_p.innerHTML = people[i].Name;
@@ -443,6 +448,7 @@ async function modalAddRecord()
         return;
 
     const name = document.getElementById('name_r').value;
+    const tag = document.getElementById('tag_r').value;
     const dt = document.getElementById('date_r').value;
     const cup = document.getElementById('cup_r').value;
     const reduce_trophy = document.getElementById('reduce_trophy_r').value;
@@ -483,6 +489,7 @@ async function modalAddRecord()
         formData.append('file', null);
     formData.append('BaseID', bases[this.value].ID);
     formData.append('Name', name);
+    formData.append('Tag', tag);
     formData.append('Date', dt);
     formData.append('Cup', cup);
     formData.append('ReduceTrophy', reduce_trophy);
@@ -496,6 +503,7 @@ async function modalAddRecord()
     {
         const modalLink = document.getElementById('modal-LK');
         getAndModifyDetail(modalLink.value);
+        GetPeople();
         document.getElementById('select_person').dispatchEvent(new Event('change'));
         alert('最新數據已更新');
     }
@@ -516,8 +524,24 @@ async function CoverPreviousRecord(formData)
     {
         const modalLink = document.getElementById('modal-LK');
         getAndModifyDetail(modalLink.value);
+        GetPeople();
         document.getElementById('select_person').dispatchEvent(new Event('change'));
         alert('數據已更新');
+    }
+}
+
+async function GetPeople()
+{
+    var content = {
+        "method": "get_people"
+    };
+    var result = await fetchPost(apiUrl, content, 'application/json');
+    if(result[0] == 200)
+    {
+        for(var i=0; i<result[1].length; i++)
+        {
+            players[result[1][i].Name] = result[1][i].Tag;
+        }
     }
 }
 
@@ -617,4 +641,96 @@ async function upload()
     if(result[0] == 200)
         alert('Uploaded');
     Init();
+}
+
+const stars_trophy = [4, 15, 32, 40];
+async function cal_stars_and_trophy()
+{
+    const name = document.getElementById('name_r').value;
+    var tag = '';
+    if(name != '')
+    {
+        if(this.id != 'name_r' && document.getElementById('tag_r').value != '')
+        {
+            tag = document.getElementById('tag_r').value;
+            if(tag.indexOf('#') == 0)
+                tag = tag.substring(1, tag.length);
+            if(document.getElementById('tag_r').value.indexOf('#') != 0)
+                document.getElementById('tag_r').value = '#' + document.getElementById('tag_r').value;
+        }
+        else if(players[name] != null)
+        {
+            tag = players[name];
+            document.getElementById('tag_r').value = '#' + tag;
+        }
+        else
+            document.getElementById('tag_r').value = '';
+    }
+    const dt = document.getElementById('date_r').value;
+    if(name == '' || dt == '' || tag == '')
+        return;
+    var y = new Date(dt).getFullYear();
+    var m = new Date(dt).getMonth() + 1;
+    var ret = null;
+    for(var i=0; i<3; i++)
+    {
+        const s = y + "-" + m;
+        const url = 'https://api.clashking.xyz/player/%23' + tag + '/legends?season=' + s;
+        ret = await fetchGetJson(url);
+        if(ret[0] != 200)
+        {
+            console.log(ret[0]);
+            return;
+        }
+        if(ret[1].legends[dt] != null)
+            break;
+        else
+        {
+            switch(i)
+            {
+                case 0:
+                    if(m >= 12)
+                    {
+                        y++;
+                        m = 1;
+                    }
+                    else
+                        m++;
+                    break;
+                case 1:
+                    if(m <= 2)
+                    {
+                        y = new Date(dt).getFullYear() - 1;
+                        m = new Date(dt).getMonth();
+                        if(m == 0)
+                            m = 12;
+                    }
+                    break;
+            }
+        }
+    }
+    if(ret[1].legends[dt] != null)
+    {
+        const history = ret[1].legends[dt];
+        var stars = [0,0,0,0];
+        var sum = 0;
+        for(var i=0; i<history.defenses.length; i++)
+        {
+            sum += history.defenses[i];
+            for(var j=0; j<stars_trophy.length; j++)
+            {
+                if(history.defenses[i] <= stars_trophy[j])
+                {
+                    stars[j]++;
+                    break;
+                }
+            }
+        }
+        document.getElementById('reduce_trophy_r').value = sum;
+        document.getElementById('lStar0_r').value = stars[0];
+        document.getElementById('lStar1_r').value = stars[1];
+        document.getElementById('lStar2_r').value = stars[2];
+        document.getElementById('lStar3_r').value = stars[3];
+    }
+    return;
 }

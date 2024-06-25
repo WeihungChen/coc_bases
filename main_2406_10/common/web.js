@@ -67,6 +67,26 @@ async function fetchPostWithToken(url, body, user, contentType)
 	return [res.status, result.data, result.error];
 }
 
+async function fetchGetJson(url)
+{
+	if(url.length == 0)
+		return;
+
+	var res = await fetch(url, {
+		method: 'GET'
+	});
+
+	var result = await res.json();
+	if(res.status != 200 && result.error != null)
+	{
+		if(result.error.String != null)
+			alert(result.error.String);
+		else
+			alert(result.error);
+	}
+	return [res.status, result, result.error];
+}
+
 async function fetchPostFileUpload(url, body)
 {
 	if(url.length == 0)
@@ -90,5 +110,6 @@ async function fetchPostFileUpload(url, body)
 export {
     fetchPostFileUpload,
 	fetchPostWithToken,
-	fetchPost
+	fetchPost,
+	fetchGetJson
 };
