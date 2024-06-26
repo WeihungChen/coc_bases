@@ -448,7 +448,7 @@ async function modalAddRecord()
         return;
 
     const name = document.getElementById('name_r').value;
-    const tag = document.getElementById('tag_r').value;
+    var tag = document.getElementById('tag_r').value;
     const dt = document.getElementById('date_r').value;
     const cup = document.getElementById('cup_r').value;
     const reduce_trophy = document.getElementById('reduce_trophy_r').value;
@@ -482,6 +482,8 @@ async function modalAddRecord()
         alert('請上傳防守圖！');
         return;
     }
+    if(tag.indexOf('#') == 0)
+        tag = tag.substring(1, tag.length);
     const formData = new FormData();
     if(imageUpload.files.length > 0)
         formData.append('file', imageUpload.files[0]);
@@ -538,9 +540,15 @@ async function GetPeople()
     var result = await fetchPost(apiUrl, content, 'application/json');
     if(result[0] == 200)
     {
+        const select_person = document.getElementById('select_person');
+        select_person.innerHTML = '';
         for(var i=0; i<result[1].length; i++)
         {
             players[result[1][i].Name] = result[1][i].Tag;
+            const opt_p = document.createElement('option');
+            opt_p.value = result[1][i].Name;
+            opt_p.innerHTML = result[1][i].Name;
+            select_person.appendChild(opt_p);
         }
     }
 }
