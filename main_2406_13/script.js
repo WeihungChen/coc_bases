@@ -720,6 +720,9 @@ async function cal_stars_and_trophy()
     if(ret[1].legends[dt] != null)
     {
         const history = ret[1].legends[dt];
+        if(history.defenses == null)
+            return;
+
         var stars = [0,0,0,0];
         var sum = 0;
         for(var i=0; i<history.defenses.length; i++)
