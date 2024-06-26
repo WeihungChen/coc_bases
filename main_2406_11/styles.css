@@ -420,3 +420,33 @@ img {
     max-width: 100%;
     max-height: 300px;
 }
+
+.personal_list {
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    display: block;
+    height: 100%;
+    overflow-y: auto;
+}
+
+.personal_table {
+    display: block;
+    margin: 0px;
+    padding: 0px;
+}
+
+.personal_head {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    height: 40px;
+}
+
+#personal_history_body {
+    max-height: calc(100% - 40px);
+}
+
+.personal_list_td {
+    padding: 0;
+}
