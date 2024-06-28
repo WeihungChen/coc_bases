@@ -265,6 +265,7 @@ async function select_base_changed()
 
 async function showBases()
 {
+    document.getElementById('l_bases').innerHTML = bases.length + ' Bases';
     const table_base = document.getElementById('table_base');
     table_base.innerHTML = '';
     for(var i=0; i<bases.length; i++)
