@@ -689,6 +689,7 @@ async function cal_stars_and_trophy()
     var result = await fetchPost(apiUrl, content, 'application/json');
     if(result[0] == 200)
     {
+        document.getElementById('cup_r').value = result[1].InitTrophies;
         document.getElementById('reduce_trophy_r').value = result[1].LossTrophy;
         document.getElementById('lStar0_r').value = result[1].DefenseStars[0];
         document.getElementById('lStar1_r').value = result[1].DefenseStars[1];
