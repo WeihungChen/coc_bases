@@ -678,71 +678,21 @@ async function cal_stars_and_trophy()
     const dt = document.getElementById('date_r').value;
     if(name == '' || dt == '' || tag == '')
         return;
-    var y = new Date(dt).getFullYear();
-    var m = new Date(dt).getMonth() + 1;
-    var ret = null;
-    for(var i=0; i<3; i++)
-    {
-        const s = y + "-" + m;
-        const url = 'https://api.clashking.xyz/player/%23' + tag + '/legends?season=' + s;
-        ret = await fetchGetJson(url);
-        if(ret[0] != 200)
-        {
-            console.log(ret[0]);
-            return;
-        }
-        if(ret[1].legends[dt] != null)
-            break;
-        else
-        {
-            switch(i)
-            {
-                case 0:
-                    if(m >= 12)
-                    {
-                        y++;
-                        m = 1;
-                    }
-                    else
-                        m++;
-                    break;
-                case 1:
-                    if(m <= 2)
-                    {
-                        y = new Date(dt).getFullYear() - 1;
-                        m = new Date(dt).getMonth();
-                        if(m == 0)
-                            m = 12;
-                    }
-                    break;
-            }
-        }
-    }
-    if(ret[1].legends[dt] != null)
-    {
-        const history = ret[1].legends[dt];
-        if(history.defenses == null)
-            return;
 
-        var stars = [0,0,0,0];
-        var sum = 0;
-        for(var i=0; i<history.defenses.length; i++)
-        {
-            sum += history.defenses[i];
-            for(var j=0; j<stars_trophy.length; j++)
-            {
-                if(history.defenses[i] <= stars_trophy[j])
-                {
-                    stars[j]++;
-                    break;
-                }
-            }
+    var content = {
+        "method": "get_legends_day",
+        "data": {
+            "Tag": tag,
+            "Date": dt
         }
-        document.getElementById('reduce_trophy_r').value = sum;
-        document.getElementById('lStar0_r').value = stars[0];
-        document.getElementById('lStar1_r').value = stars[1];
-        document.getElementById('lStar2_r').value = stars[2];
-        document.getElementById('lStar3_r').value = stars[3];
+    };
+    var result = await fetchPost(apiUrl, content, 'application/json');
+    if(result[0] == 200)
+    {
+        document.getElementById('reduce_trophy_r').value = result[1].LossTrophy;
+        document.getElementById('lStar0_r').value = result[1].DefenseStars[0];
+        document.getElementById('lStar1_r').value = result[1].DefenseStars[1];
+        document.getElementById('lStar2_r').value = result[1].DefenseStars[2];
+        document.getElementById('lStar3_r').value = result[1].DefenseStars[3];
     }
-    return;
 }
