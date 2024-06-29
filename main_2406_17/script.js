@@ -672,8 +672,6 @@ async function cal_stars_and_trophy()
             tag = players[name];
             document.getElementById('tag_r').value = '#' + tag;
         }
-        else
-            document.getElementById('tag_r').value = '';
     }
     const dt = document.getElementById('date_r').value;
     if(name == '' || dt == '' || tag == '')
@@ -689,11 +687,16 @@ async function cal_stars_and_trophy()
     var result = await fetchPost(apiUrl, content, 'application/json');
     if(result[0] == 200)
     {
-        document.getElementById('cup_r').value = result[1].InitTrophies;
-        document.getElementById('reduce_trophy_r').value = result[1].LossTrophy;
-        document.getElementById('lStar0_r').value = result[1].DefenseStars[0];
-        document.getElementById('lStar1_r').value = result[1].DefenseStars[1];
-        document.getElementById('lStar2_r').value = result[1].DefenseStars[2];
-        document.getElementById('lStar3_r').value = result[1].DefenseStars[3];
+        if(result[1].InitTrophies)
+            document.getElementById('cup_r').value = result[1].InitTrophies;
+        if(result[1].LossTrophy)
+            document.getElementById('reduce_trophy_r').value = result[1].LossTrophy;
+        if(result[1].DefenseStars)
+        {
+            document.getElementById('lStar0_r').value = result[1].DefenseStars[0];
+            document.getElementById('lStar1_r').value = result[1].DefenseStars[1];
+            document.getElementById('lStar2_r').value = result[1].DefenseStars[2];
+            document.getElementById('lStar3_r').value = result[1].DefenseStars[3];
+        }
     }
 }
