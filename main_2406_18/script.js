@@ -107,10 +107,13 @@ async function Init()
     for(var i=0; i<people.length; i++)
     {
         players[people[i].Name] = people[i].Tag;
-        const opt_p = document.createElement('option');
-        opt_p.value = people[i].Name;
-        opt_p.innerHTML = people[i].Name;
-        select_person.appendChild(opt_p);
+        if(people[i].historyCount > 0)
+        {
+            const opt_p = document.createElement('option');
+            opt_p.value = people[i].Name;
+            opt_p.innerHTML = people[i].Name;
+            select_person.appendChild(opt_p);
+        }
     }
     select_person.dispatchEvent(new Event('change'));
     bases = result[1].Bases;
@@ -546,10 +549,13 @@ async function GetPeople()
         for(var i=0; i<result[1].length; i++)
         {
             players[result[1][i].Name] = result[1][i].Tag;
-            const opt_p = document.createElement('option');
-            opt_p.value = result[1][i].Name;
-            opt_p.innerHTML = result[1][i].Name;
-            select_person.appendChild(opt_p);
+            if(result[1][i].historyCount > 0)
+            {
+                const opt_p = document.createElement('option');
+                opt_p.value = result[1][i].Name;
+                opt_p.innerHTML = result[1][i].Name;
+                select_person.appendChild(opt_p);
+            }
         }
     }
 }
