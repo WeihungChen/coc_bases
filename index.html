@@ -31,6 +31,7 @@
                             <td><h2>~</h2></td>
                             <td><div class="custom-select"><select id="select_cup2" style="background-color: rgba(114, 255, 255,0.2)"></select></div></td>
                         </tr>
+                        <tr><td colspan="4"><div id="legend_data">__</div></td></tr>
                         <tr><td colspan="4"><label id="l_bases" class="label1">Bases</label></td></tr>
                     </table>
                 </div>
@@ -208,6 +209,39 @@
                                     <td class="history_content"><label id="lStar1_attcked"></label></td>
                                     <td class="history_content"><label id="lStar0_attcked"></label></td>
                                 </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="modal_legend_data" class="modal-legend-data">
+            <div class="modal-content">
+                <div class="modal-header" id="close_legend_data">
+                    x
+                </div>
+                <div class="modal-body">
+                    <div class="modal-fixed">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <td colspan="3"><div class="custom-select"><select id="select_legend_person" style="background-color: rgba(114, 170, 255, 0.2)"></select></div></td>
+                                    <td colspan="3"><div class="custom-select"><select id="select_legend_season" style="background-color: rgba(114, 170, 255, 0.2)"></select></div></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3" id="avgATK"></td>
+                                    <td colspan="3" id="avgDEF"></td>
+                                </tr>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Init</th>
+                                    <th>ATK</th>
+                                    <th>DEF</th>
+                                    <th>+/-</th>
+                                    <th>Final</th>
+                                </tr>
+                            </thead>
+                            <tbody id="body_legend_data">
                             </tbody>
                         </table>
                     </div>
