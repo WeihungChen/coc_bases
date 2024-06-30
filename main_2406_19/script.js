@@ -13,9 +13,13 @@ document.getElementById('modal-LK').addEventListener('click', modalLinkClicked);
 document.getElementById('modal-add-record').addEventListener('click', modalAddRecord);
 document.getElementById('attackedImg').addEventListener('change', AttackedImgAdd);
 document.getElementById('close_attacked').addEventListener('click', closeAttackedModal);
+document.getElementById('legend_data').addEventListener('click', openLegendData);
+document.getElementById('close_legend_data').addEventListener('click', closeLegendData);
 document.getElementById('select_cup1').addEventListener('change', selectCupChanged);
 document.getElementById('select_cup2').addEventListener('change', selectCupChanged);
 document.getElementById('select_person').addEventListener('change', SelectPersonChanged);
+document.getElementById('select_legend_person').addEventListener('change', SelectLegendPersonChanged);
+document.getElementById('select_legend_season').addEventListener('change', SelectLegendSeasonChanged);
 document.getElementById('name_r').addEventListener('change', cal_stars_and_trophy);
 document.getElementById('tag_r').addEventListener('change', cal_stars_and_trophy);
 document.getElementById('date_r').addEventListener('change', cal_stars_and_trophy);
@@ -101,11 +105,16 @@ async function Init()
     }
     select_cup2.selectedIndex = select_cup2.options.length - 1;
 
+    const select_legend_person = document.getElementById('select_legend_person');
+    select_legend_person.innerHTML = '';
     const select_person = document.getElementById('select_person');
     select_person.innerHTML = '';
     const people = result[1].People;
+    var tag = '';
     for(var i=0; i<people.length; i++)
     {
+        if(i == 0)
+            tag = people[i].Tag;
         players[people[i].Name] = people[i].Tag;
         if(people[i].historyCount > 0)
         {
@@ -114,8 +123,13 @@ async function Init()
             opt_p.innerHTML = people[i].Name;
             select_person.appendChild(opt_p);
         }
+        const opt_legend_data = document.createElement('option');
+        opt_legend_data.value = people[i].Tag;
+        opt_legend_data.innerHTML = people[i].Name;
+        select_legend_person.appendChild(opt_legend_data);
     }
     select_person.dispatchEvent(new Event('change'));
+    select_legend_person.dispatchEvent(new Event('change'));
     bases = result[1].Bases;
     showBases();
     document.getElementById('select_base').addEventListener('change', select_base_changed);
@@ -126,6 +140,80 @@ function InitInputObj()
     const objs = document.querySelectorAll('input');
     for(var i=0; i<objs.length; i++)
         objs[i].addEventListener('focus', SelectALL);
+}
+
+async function SelectLegendSeasonChanged()
+{
+    const tag = document.getElementById('select_legend_person').value;
+    const season = this.value;
+    if(tag == null || tag == '' || season == null || season == '')
+        return;
+
+    var content = {
+        "method": "get_legends_season_data",
+        "data": {
+            "Tag": tag,
+            "Season": season
+        }
+    };
+    var result = await fetchPost(apiUrl, content, 'application/json');
+    if(result[0] == 200)
+    {
+        const ret = result[1];
+        document.getElementById('avgATK').innerHTML = 'Avg. ATK: ' + ret.AvgGain;
+        document.getElementById('avgDEF').innerHTML = 'Avg. DEF: ' + ret.AvgLoss;
+        const body_legend_data = document.getElementById('body_legend_data');
+        body_legend_data.innerHTML = '';
+        for(var i=0; i<ret.Legends.length; i++)
+        {
+            const row = body_legend_data.insertRow(-1);
+            const cDT = row.insertCell(-1);
+            cDT.innerHTML = ret.Legends[i].Date;
+            cDT.className = 'legend_content';
+            const cInit = row.insertCell(-1);
+            cInit.innerHTML = ret.Legends[i].InitTrophies;
+            cInit.className = 'legend_content';
+            const cGain = row.insertCell(-1);
+            cGain.innerHTML = ret.Legends[i].GainTrophy;
+            cGain.className = 'legend_content';
+            const cLoss = row.insertCell(-1);
+            cLoss.innerHTML = ret.Legends[i].LossTrophy;
+            cLoss.className = 'legend_content';
+            const cDif = row.insertCell(-1);
+            cDif.innerHTML = ret.Legends[i].Dif;
+            cDif.className = 'legend_content';
+            const cFinal = row.insertCell(-1);
+            cFinal.innerHTML = ret.Legends[i].FinalTrophies;
+            cFinal.className = 'legend_content';
+        }
+    }
+}
+
+async function SelectLegendPersonChanged()
+{
+    const tag = this.value;
+    if(tag == null || tag == '')
+        return;
+    const select_legend_season = document.getElementById('select_legend_season');
+    select_legend_season.innerHTML = '';
+    var content = {
+        "method": "get_legends_seasons_by_player",
+        "data": {
+            "Tag": tag
+        }
+    };
+    var result = await fetchPost(apiUrl, content, 'application/json');
+    if(result[0] == 200)
+    {
+        for(var i=0; i<result[1].length; i++)
+        {
+            const opt = document.createElement('option');
+            opt.value = result[1][i].Season;
+            opt.innerHTML = result[1][i].Season;
+            select_legend_season.appendChild(opt);
+        }
+        select_legend_season.dispatchEvent(new Event('change'));
+    }
 }
 
 async function SelectPersonChanged()
@@ -544,6 +632,8 @@ async function GetPeople()
     var result = await fetchPost(apiUrl, content, 'application/json');
     if(result[0] == 200)
     {
+        const select_legend_person = document.getElementById('select_legend_person');
+        select_legend_person.innerHTML = '';
         const select_person = document.getElementById('select_person');
         select_person.innerHTML = '';
         for(var i=0; i<result[1].length; i++)
@@ -556,7 +646,13 @@ async function GetPeople()
                 opt_p.innerHTML = result[1][i].Name;
                 select_person.appendChild(opt_p);
             }
+            const opt_legend_data = document.createElement('option');
+            opt_legend_data.value = result[1][i].Tag;
+            opt_legend_data.innerHTML = result[1][i].Name;
+            select_legend_person.appendChild(opt_legend_data);
         }
+        select_person.dispatchEvent(new Event('change'));
+        select_legend_person.dispatchEvent(new Event('change'));
     }
 }
 
@@ -569,6 +665,18 @@ function closeAttackedModal()
 {
     const modal = document.getElementById('modal_attacked');
     modal.style.display = 'none';
+}
+
+function closeLegendData()
+{
+    const modal = document.getElementById('modal_legend_data');
+    modal.style.display = 'none';
+}
+
+function openLegendData()
+{
+    const modal = document.getElementById('modal_legend_data');
+    modal.style.display = 'block';
 }
 
 function tabAdd() {
