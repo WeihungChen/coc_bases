@@ -476,4 +476,5 @@ img {
     box-shadow: 0px;
     width: 100%;
     color: white;
+    cursor: default;
 }
