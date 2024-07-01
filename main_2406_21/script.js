@@ -174,10 +174,10 @@ async function SelectLegendSeasonChanged()
             cInit.innerHTML = ret.Legends[i].InitTrophies;
             cInit.className = 'legend_content';
             const cGain = row.insertCell(-1);
-            cGain.innerHTML = ret.Legends[i].GainTrophy;
+            cGain.innerHTML = ret.Legends[i].GainTrophy + ' <label class="small-print">' + ret.Legends[i].Attacks.length + '</label>';
             cGain.className = 'legend_content';
             const cLoss = row.insertCell(-1);
-            cLoss.innerHTML = ret.Legends[i].LossTrophy;
+            cLoss.innerHTML = ret.Legends[i].LossTrophy + ' <label class="small-print">' + ret.Legends[i].Defenses.length + '</label>';
             cLoss.className = 'legend_content';
             const cDif = row.insertCell(-1);
             cDif.innerHTML = ret.Legends[i].Dif;
