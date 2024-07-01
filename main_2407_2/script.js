@@ -167,9 +167,13 @@ async function SelectLegendSeasonChanged()
         for(var i=0; i<ret.Legends.length; i++)
         {
             const row = body_legend_data.insertRow(-1);
+            const cDay = row.insertCell(-1);
+            cDay.innerHTML = ret.Legends[i].Day;
+            cDay.className = 'legend_content';
             const cDT = row.insertCell(-1);
             cDT.innerHTML = ret.Legends[i].Date;
             cDT.className = 'legend_content';
+            cDT.colSpan = 2;
             const cInit = row.insertCell(-1);
             cInit.innerHTML = ret.Legends[i].InitTrophies;
             cInit.className = 'legend_content';
