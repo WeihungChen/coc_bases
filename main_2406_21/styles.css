@@ -194,6 +194,10 @@ th {
     margin: 5px;
 }
 
+.small-print {
+    font-size: 10px;
+}
+
 .history_content {
     background-color: rgba(160,241,255,0.2);
     padding: 5px;
