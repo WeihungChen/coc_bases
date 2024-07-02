@@ -9,8 +9,10 @@ document.getElementById('imageUpload').addEventListener('change', ImgAdd);
 document.getElementById('btnUpload').addEventListener('click', upload);
 document.getElementById('close').addEventListener('click', closeModal);
 document.getElementById('modal-add').addEventListener('click', tabAdd);
+document.getElementById('modal-add-player').addEventListener('click', tabAddPlayer);
 document.getElementById('modal-LK').addEventListener('click', modalLinkClicked);
 document.getElementById('modal-add-record').addEventListener('click', modalAddRecord);
+document.getElementById('btn-add-player').addEventListener('click', modalAddPlayer);
 document.getElementById('attackedImg').addEventListener('change', AttackedImgAdd);
 document.getElementById('close_attacked').addEventListener('click', closeAttackedModal);
 document.getElementById('legend_data').addEventListener('click', openLegendData);
@@ -23,6 +25,7 @@ document.getElementById('select_legend_season').addEventListener('change', Selec
 document.getElementById('name_r').addEventListener('change', cal_stars_and_trophy);
 document.getElementById('tag_r').addEventListener('change', cal_stars_and_trophy);
 document.getElementById('date_r').addEventListener('change', cal_stars_and_trophy);
+document.getElementById('tag_r_add_player').addEventListener('change', add_player_tag_change);
 
 document.addEventListener("DOMContentLoaded", function() {
     const tabs = document.querySelectorAll(".tab");
@@ -538,6 +541,28 @@ function modalLinkClicked()
     window.open(bases[this.value].Link, '_blank');
 }
 
+async function modalAddPlayer()
+{
+    const name = document.getElementById('name_r_add_player').value;
+    var tag = document.getElementById('tag_r_add_player').value;
+    if(name == '' || tag == '')
+        return;
+    if(tag.indexOf('#') == 0)
+        tag = tag.substring(1, tag.length);
+
+    var content = {
+        "method": "add_player",
+        "data": {
+            "Name": name,
+            "Tag": tag
+        }
+    };
+    var result = await fetchPost(apiUrl, content, 'application/json');
+    console.log(result);
+    if(result[0] == 200)
+        Init();
+}
+
 async function modalAddRecord()
 {
     if(this.value >= bases.length)
@@ -700,6 +725,24 @@ function tabAdd() {
     }
 }
 
+function tabAddPlayer()
+{
+    const items = document.querySelectorAll('.modal-add-player');
+    if(items.length > 0)
+    {
+        if(items[0].style.display == 'none')
+        {
+            for(var i=0; i<items.length; i++)
+                items[i].style.display = 'block';
+        }
+        else
+        {
+            for(var i=0; i<items.length; i++)
+                items[i].style.display = 'none';
+        }
+    }
+}
+
 function AttackedImgAdd()
 {
     const imageUpload = document.getElementById('attackedImg');
@@ -817,4 +860,10 @@ async function cal_stars_and_trophy()
             document.getElementById('lStar3_r').value = result[1].DefenseStars[3];
         }
     }
+}
+
+function add_player_tag_change()
+{
+    if(this.value.indexOf('#') != 0)
+        this.value = '#' + this.value;
 }
