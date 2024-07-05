@@ -17,8 +17,11 @@ document.getElementById('attackedImg').addEventListener('change', AttackedImgAdd
 document.getElementById('close_attacked').addEventListener('click', closeAttackedModal);
 document.getElementById('legend_data').addEventListener('click', openLegendData);
 document.getElementById('close_legend_data').addEventListener('click', closeLegendData);
-document.getElementById('select_cup1').addEventListener('change', selectCupChanged);
-document.getElementById('select_cup2').addEventListener('change', selectCupChanged);
+document.getElementById('select_base').addEventListener('change', queryBases);
+document.getElementById('select_cup1').addEventListener('change', queryBases);
+document.getElementById('select_cup2').addEventListener('change', queryBases);
+document.getElementById('select_date1').addEventListener('change', queryBases);
+document.getElementById('select_date2').addEventListener('change', queryBases);
 document.getElementById('select_person').addEventListener('change', SelectPersonChanged);
 document.getElementById('select_legend_person').addEventListener('change', SelectLegendPersonChanged);
 document.getElementById('select_legend_season').addEventListener('change', SelectLegendSeasonChanged);
@@ -135,7 +138,6 @@ async function Init()
     select_legend_person.dispatchEvent(new Event('change'));
     bases = result[1].Bases;
     showBases();
-    document.getElementById('select_base').addEventListener('change', select_base_changed);
 }
 
 function InitInputObj()
@@ -317,40 +319,21 @@ function SelectALL()
     this.select();
 }
 
-async function selectCupChanged()
+async function queryBases()
 {
     const base = document.getElementById('select_base').value;
     const cup1 = document.getElementById('select_cup1').value;
     const cup2 = document.getElementById('select_cup2').value;
+    const select_date1 = document.getElementById('select_date1').value;
+    const select_date2 = document.getElementById('select_date2').value;
     var content = {
         "method": "th_change",
         "data": {
             "TH": base,
             "Max_Cup": Math.max(cup1, cup2),
-            "Min_Cup": Math.min(cup1, cup2)
-        }
-    };
-    var result = await fetchPost(apiUrl, content, 'application/json');
-    if(result[0] != 200 || result[1] == null || result[1].Bases == null)
-        return;
-
-    bases = result[1].Bases;
-    showBases();
-}
-
-async function select_base_changed()
-{
-    if(this.value == '')
-        return;
-
-    const cup1 = document.getElementById('select_cup1').value;
-    const cup2 = document.getElementById('select_cup2').value;
-    var content = {
-        "method": "th_change",
-        "data": {
-            "TH": this.value,
-            "Max_Cup": Math.max(cup1, cup2),
-            "Min_Cup": Math.min(cup1, cup2)
+            "Min_Cup": Math.min(cup1, cup2),
+            "Start_Date": select_date1 == '' ? null : select_date1,
+            "End_Date": select_date2 == '' ? null : select_date2
         }
     };
     var result = await fetchPost(apiUrl, content, 'application/json');
@@ -810,10 +793,21 @@ async function upload()
     var result = await fetchPost(apiUrl + "/upload", content);
     if(result[0] == 200)
         alert('Uploaded');
+    else if(result[0] == 405)
+    {
+        alert(result[2]);
+        const baseidx = bases.findIndex(obj => obj.ID == result[1].ID);
+        getAndModifyDetail(baseidx);
+        document.getElementById('personal_attacked_img_div').style.display = 'none';
+        document.getElementById('tabOverAll').dispatchEvent(new Event('click'));
+        modal.style.display = 'block';
+        modalImage.src = bases[baseidx].Pic;
+        modalLink.value = baseidx;
+        modalAdd.value = baseidx;
+    }
     Init();
 }
 
-const stars_trophy = [4, 15, 32, 40];
 async function cal_stars_and_trophy()
 {
     const name = document.getElementById('name_r').value;

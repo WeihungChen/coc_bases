@@ -246,6 +246,17 @@ img {
     cursor: pointer;
 }
 
+.custom-select input[type="date"] {
+    height: 40px;
+    width: 80%;
+    font-size: 16px;
+    color: #333333;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    text-align: center;
+    cursor: pointer;
+}
+
 .custom-select select:focus {
     outline: none;
     border-color: #007bff; /* Focus border color */
