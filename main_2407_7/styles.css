@@ -248,7 +248,7 @@ img {
 
 .custom-select input[type="date"] {
     height: 40px;
-    width: 80%;
+    width: 100%;
     font-size: 16px;
     color: #333333;
     border: 1px solid #ccc;
