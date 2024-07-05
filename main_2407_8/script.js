@@ -29,6 +29,9 @@ document.getElementById('name_r').addEventListener('change', cal_stars_and_troph
 document.getElementById('tag_r').addEventListener('change', cal_stars_and_trophy);
 document.getElementById('date_r').addEventListener('change', cal_stars_and_trophy);
 document.getElementById('tag_r_add_player').addEventListener('change', add_player_tag_change);
+document.getElementById('s_cup').addEventListener('click', show_select_base);
+document.getElementById('s_date').addEventListener('click', show_select_base);
+document.getElementById('close_base_select').addEventListener('click', closeBaseSelect);
 
 document.addEventListener("DOMContentLoaded", function() {
     const tabs = document.querySelectorAll(".tab");
@@ -138,6 +141,10 @@ async function Init()
     select_legend_person.dispatchEvent(new Event('change'));
     bases = result[1].Bases;
     showBases();
+    const cup1 = document.getElementById('select_cup1').value;
+    const cup2 = document.getElementById('select_cup2').value;
+    document.getElementById('s_cup').innerHTML = "盃段: " + cup1 + " ~ " + cup2;
+    document.getElementById('s_date').innerHTML = "上傳時間: All";
 }
 
 function InitInputObj()
@@ -342,6 +349,18 @@ async function queryBases()
 
     bases = result[1].Bases;
     showBases();
+    document.getElementById('s_cup').innerHTML = "盃段: " + cup1 + " ~ " + cup2;
+    var upDT = 'All';
+    if(select_date1 != '')
+        upDT = select_date1 + ' ~';
+    if(select_date2 != '')
+    {
+        if(upDT != 'All')
+            upDT += ' ' + select_date2;
+        else
+            upDT = '~ ' + select_date2;
+    }
+    document.getElementById('s_date').innerHTML = "上傳時間: " + upDT;
 }
 
 async function showBases()
@@ -685,6 +704,12 @@ function closeLegendData()
     modal.style.display = 'none';
 }
 
+function closeBaseSelect()
+{
+    const modal = document.getElementById('modal_base_select');
+    modal.style.display = 'none';
+}
+
 function openLegendData()
 {
     const modal = document.getElementById('modal_legend_data');
@@ -860,4 +885,9 @@ function add_player_tag_change()
 {
     if(this.value.indexOf('#') != 0)
         this.value = '#' + this.value;
+}
+
+function show_select_base()
+{
+    document.getElementById('modal_base_select').style.display = 'block';
 }

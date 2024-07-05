@@ -53,6 +53,10 @@ body {
     max-width: 20vh;
 }
 
+#select_td label {
+    cursor: pointer;
+}
+
 .tab-content {
     position: relative;
     padding: 0;
