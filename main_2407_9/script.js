@@ -22,6 +22,8 @@ document.getElementById('select_cup1').addEventListener('change', queryBases);
 document.getElementById('select_cup2').addEventListener('change', queryBases);
 document.getElementById('select_date1').addEventListener('change', queryBases);
 document.getElementById('select_date2').addEventListener('change', queryBases);
+document.getElementById('select_use_date1').addEventListener('change', queryBases);
+document.getElementById('select_use_date2').addEventListener('change', queryBases);
 document.getElementById('select_person').addEventListener('change', SelectPersonChanged);
 document.getElementById('select_legend_person').addEventListener('change', SelectLegendPersonChanged);
 document.getElementById('select_legend_season').addEventListener('change', SelectLegendSeasonChanged);
@@ -31,6 +33,7 @@ document.getElementById('date_r').addEventListener('change', cal_stars_and_troph
 document.getElementById('tag_r_add_player').addEventListener('change', add_player_tag_change);
 document.getElementById('s_cup').addEventListener('click', show_select_base);
 document.getElementById('s_date').addEventListener('click', show_select_base);
+document.getElementById('s_use_date').addEventListener('click', show_select_base);
 document.getElementById('close_base_select').addEventListener('click', closeBaseSelect);
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -141,10 +144,13 @@ async function Init()
     select_legend_person.dispatchEvent(new Event('change'));
     bases = result[1].Bases;
     showBases();
+    document.getElementById('select_use_date1').value = result[1].Use_Start_Date;
+    document.getElementById('select_use_date2').value = result[1].Use_End_Date;
     const cup1 = document.getElementById('select_cup1').value;
     const cup2 = document.getElementById('select_cup2').value;
     document.getElementById('s_cup').innerHTML = "盃段: " + cup1 + " ~ " + cup2;
     document.getElementById('s_date').innerHTML = "上傳時間: All";
+    document.getElementById('s_use_date').innerHTML = "使用期間: " + result[1].Use_Start_Date + " ~ " + result[1].Use_End_Date;
 }
 
 function InitInputObj()
@@ -333,6 +339,8 @@ async function queryBases()
     const cup2 = document.getElementById('select_cup2').value;
     const select_date1 = document.getElementById('select_date1').value;
     const select_date2 = document.getElementById('select_date2').value;
+    const select_use_date1 = document.getElementById('select_use_date1').value;
+    const select_use_date2 = document.getElementById('select_use_date2').value;
     var content = {
         "method": "th_change",
         "data": {
@@ -340,7 +348,9 @@ async function queryBases()
             "Max_Cup": Math.max(cup1, cup2),
             "Min_Cup": Math.min(cup1, cup2),
             "Start_Date": select_date1 == '' ? null : select_date1,
-            "End_Date": select_date2 == '' ? null : select_date2
+            "End_Date": select_date2 == '' ? null : select_date2,
+            "Use_Start_Date": select_use_date1 == '' ? null : select_use_date1,
+            "Use_End_Date": select_use_date2 == '' ? null : select_use_date2
         }
     };
     var result = await fetchPost(apiUrl, content, 'application/json');
@@ -361,6 +371,17 @@ async function queryBases()
             upDT = '~ ' + select_date2;
     }
     document.getElementById('s_date').innerHTML = "上傳時間: " + upDT;
+    var useDT = 'All';
+    if(select_use_date1 != '')
+        useDT = select_use_date1 + ' ~';
+    if(select_use_date2 != '')
+    {
+        if(useDT != 'All')
+            useDT += ' ' + select_use_date2;
+        else
+            useDT = '~ ' + select_use_date2;
+    }
+    document.getElementById('s_use_date').innerHTML = "使用期間: " + useDT;
 }
 
 async function showBases()

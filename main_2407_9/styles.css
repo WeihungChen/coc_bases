@@ -51,6 +51,8 @@ body {
 #select_td {
     width:20%;
     max-width: 20vh;
+    background-color: rgba(77, 163, 255, 0.2);
+    border-radius: 8px;
 }
 
 #select_td label {
