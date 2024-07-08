@@ -733,6 +733,7 @@ function closeBaseSelect()
 
 function openLegendData()
 {
+    document.getElementById('select_legend_person').dispatchEvent(new Event('change'));
     const modal = document.getElementById('modal_legend_data');
     modal.style.display = 'block';
 }
