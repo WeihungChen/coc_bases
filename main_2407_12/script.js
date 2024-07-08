@@ -432,12 +432,16 @@ async function getBaseDetail(idx)
     }
     const cup1 = document.getElementById('select_cup1').value;
     const cup2 = document.getElementById('select_cup2').value;
+    const use_date1 = document.getElementById('select_use_date1').value;
+    const use_date2 = document.getElementById('select_use_date2').value;
     var content = {
         "method": "get_base_detail",
         "data": {
             "BaseID": bases[idx].ID,
             "Max_Cup": Math.max(cup1, cup2),
-            "Min_Cup": Math.min(cup1, cup2)
+            "Min_Cup": Math.min(cup1, cup2),
+            "Use_Start_Date": use_date1 == '' ? null : use_date1,
+            "Use_End_Date": use_date2 == '' ? null : use_date2
         }
     };
     var result = await fetchPost(apiUrl, content, 'application/json');
