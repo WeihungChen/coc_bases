@@ -22,7 +22,7 @@
                 <div class="flex-table">
                     <table id="select_table">
                         <tr>
-                            <td colspan="6"><div class="custom-select"><select id="select_base" style="background-color: rgba(114, 170, 255, 0.2)"></select></div></td>
+                            <td colspan="6"><div class="custom-select"><select id="select_base" style="background-color: rgb(212, 229, 255)"></select></div></td>
                         </tr>
                         <tr><td colspan="6" style="color:white;font-size:4px;">_</td></tr>
                         <tr><td id="select_td" colspan="3"><label id="s_cup" class="label1">盃段</label></td><td id="select_td" colspan="3"><label id="s_date" class="label1">上傳時間</label></td></tr>
@@ -34,34 +34,23 @@
                 <div class="baseTable"><table id="table_base"></table></div>
             </div>
             <div id="PersonTab" class="tab-content">
-                <div class="flex-table">
+                <div class="personal_table_div">
                     <table id="select_table">
-                        <tr>
-                            <td><div class="custom-select"><select id="select_person" style="background-color: rgba(114, 170, 255, 0.2)"></select></div></td>
-                        </tr>
-                        <tr>
-                            <td class="personal_list_td">
-                                <div class="modal-fixed">
-                                    <div class="personal_list">
-                                        <table class="personal_table">
-                                            <thead class="personal_head">
-                                                <tr>
-                                                    <th>日期</th>
-                                                    <th>盃數</th>
-                                                    <th>扣盃</th>
-                                                    <th><img src="Star3.png" class="istar"></th>
-                                                    <th><img src="Star2.png" class="istar"></th>
-                                                    <th><img src="Star1.png" class="istar"></th>
-                                                    <th><img src="Star0.png" class="istar"></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="personal_history_body"></tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                               
-                            </td>
-                        </tr>
+                        <thead class="personal_head">
+                            <tr>
+                                <td colspan="7"><div class="custom-select"><select id="select_person" style="background-color: rgb(212, 229, 255)"></select></div></td>
+                            </tr>
+                            <tr>
+                                <th>日期</th>
+                                <th>盃數</th>
+                                <th>扣盃</th>
+                                <th><img src="Star3.png" class="istar"></th>
+                                <th><img src="Star2.png" class="istar"></th>
+                                <th><img src="Star1.png" class="istar"></th>
+                                <th><img src="Star0.png" class="istar"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="personal_history_body"></tbody>
                     </table>
                 </div>
             </div>
