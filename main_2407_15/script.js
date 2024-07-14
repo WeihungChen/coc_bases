@@ -24,6 +24,7 @@ document.getElementById('select_date1').addEventListener('change', queryBases);
 document.getElementById('select_date2').addEventListener('change', queryBases);
 document.getElementById('select_use_date1').addEventListener('change', queryBases);
 document.getElementById('select_use_date2').addEventListener('change', queryBases);
+document.getElementById('select_sort').addEventListener('change', queryBases);
 document.getElementById('select_person').addEventListener('change', SelectPersonChanged);
 document.getElementById('select_legend_person').addEventListener('change', SelectLegendPersonChanged);
 document.getElementById('select_legend_season').addEventListener('change', SelectLegendSeasonChanged);
@@ -34,6 +35,7 @@ document.getElementById('tag_r_add_player').addEventListener('change', add_playe
 document.getElementById('s_cup').addEventListener('click', show_select_base);
 document.getElementById('s_date').addEventListener('click', show_select_base);
 document.getElementById('s_use_date').addEventListener('click', show_select_base);
+document.getElementById('s_sort').addEventListener('click', show_select_base);
 document.getElementById('close_base_select').addEventListener('click', closeBaseSelect);
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -116,6 +118,20 @@ async function Init()
         cur_cup += 100;
     }
     select_cup2.selectedIndex = select_cup2.options.length - 1;
+
+    const sort_categories = result[1].Sort_Categories;
+    const select_sort = document.getElementById('select_sort');
+    if(select_sort.innerHTML == '' && sort_categories.length > 0)
+    {
+        for(var i=0; i<sort_categories.length; i++)
+        {
+            const opt = document.createElement('option');
+            opt.value = sort_categories[i].Index;
+            opt.innerHTML = sort_categories[i].Name;
+            select_sort.appendChild(opt);
+        }
+        document.getElementById('s_sort').innerHTML = '排序: ' + sort_categories[0].Name;
+    }
 
     const select_legend_person = document.getElementById('select_legend_person');
     select_legend_person.innerHTML = '';
@@ -341,6 +357,7 @@ async function queryBases()
     const select_date2 = document.getElementById('select_date2').value;
     const select_use_date1 = document.getElementById('select_use_date1').value;
     const select_use_date2 = document.getElementById('select_use_date2').value;
+    const select_sort = parseInt(document.getElementById('select_sort').value);
     var content = {
         "method": "th_change",
         "data": {
@@ -350,7 +367,8 @@ async function queryBases()
             "Start_Date": select_date1 == '' ? null : select_date1,
             "End_Date": select_date2 == '' ? null : select_date2,
             "Use_Start_Date": select_use_date1 == '' ? null : select_use_date1,
-            "Use_End_Date": select_use_date2 == '' ? null : select_use_date2
+            "Use_End_Date": select_use_date2 == '' ? null : select_use_date2,
+            "Sort_Category": select_sort
         }
     };
     var result = await fetchPost(apiUrl, content, 'application/json');
@@ -585,7 +603,6 @@ async function modalAddPlayer()
         }
     };
     var result = await fetchPost(apiUrl, content, 'application/json');
-    console.log(result);
     if(result[0] == 200)
         Init();
 }
