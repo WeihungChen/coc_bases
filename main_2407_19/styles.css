@@ -385,6 +385,11 @@ img {
     cursor: pointer;
 }
 
+.div_tags_label_parent {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+}
+
 #select_base {
     text-align: center;
     margin-top: 10px;
