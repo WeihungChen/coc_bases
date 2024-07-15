@@ -1,6 +1,6 @@
 import { fetchPost, fetchGetJson } from "./common/web.js";
 import { serverUrl } from "./common/def_global.js";
-import { DateToString, addCommasToNumber, isNumeric } from "./common/globalFunctions.js";
+import { DateToString, isNumeric } from "./common/globalFunctions.js";
 const apiUrl = serverUrl + "/api";
 var bases = [];
 var current_history = [];
@@ -19,6 +19,7 @@ document.getElementById('attackedImg').addEventListener('change', AttackedImgAdd
 document.getElementById('close_attacked').addEventListener('click', closeAttackedModal);
 document.getElementById('legend_data').addEventListener('click', openLegendData);
 document.getElementById('close_legend_data').addEventListener('click', closeLegendData);
+document.getElementById('close_tags_upd').addEventListener('click', closeTagsUpd);
 document.getElementById('select_person').addEventListener('change', SelectPersonChanged);
 document.getElementById('select_legend_person').addEventListener('change', SelectLegendPersonChanged);
 document.getElementById('select_legend_season').addEventListener('change', SelectLegendSeasonChanged);
@@ -34,6 +35,9 @@ document.getElementById('s_tags').addEventListener('click', show_select_base);
 document.getElementById('close_base_select').addEventListener('click', closeBaseSelect);
 document.getElementById('new_spelltower_tag').addEventListener('change', new_tag_added);
 document.getElementById('new_other_tag').addEventListener('change', new_tag_added);
+document.getElementById('tags_upd_new_spelltower_tag').addEventListener('change', tags_upd_new_tag_added);
+document.getElementById('tags_upd_new_other_tag').addEventListener('change', tags_upd_new_tag_added);
+document.getElementById('btn-tags-upd').addEventListener('click', tags_upd_btn_clicked);
 
 document.addEventListener("DOMContentLoaded", function() {
     const tabs = document.querySelectorAll(".tab");
@@ -157,8 +161,10 @@ async function Init()
     tag_temp.length = 0;
     tag_spelltower = result[1].Tag_SpellTower;
     const d_tower_tags = document.getElementById('d_tower_tags');
+    const tags_upd_spelltower = document.getElementById('tags_upd_spelltower');
     const upload_spelltower_tags = document.getElementById('upload_spelltower_tags');
     d_tower_tags.innerHTML = '';
+    tags_upd_spelltower.innerHTML = '';
     upload_spelltower_tags.innerHTML = '';
     for(var i=0; i<tag_spelltower.length; i++)
     {
@@ -168,6 +174,12 @@ async function Init()
         l.className = 'label_tag';
         l.addEventListener('click', tag_clicked);
         d_tower_tags.appendChild(l);
+        const l_upd = document.createElement('label');
+        l_upd.innerHTML = tag_spelltower[i].TagName;
+        l_upd.value = tag_spelltower[i].ID;
+        l_upd.className = 'label_tags_upd';
+        l_upd.addEventListener('click', tag_upd_clicked);
+        tags_upd_spelltower.appendChild(l_upd);
         const l_u = document.createElement('label');
         l_u.innerHTML = tag_spelltower[i].TagName;
         l_u.value = tag_spelltower[i].ID;
@@ -177,8 +189,10 @@ async function Init()
     }
     tag_others = result[1].Tag_Others;
     const d_other_tags = document.getElementById('d_other_tags');
+    const tags_upd_others = document.getElementById('tags_upd_others');
     const upload_other_tags = document.getElementById('upload_other_tags');
     d_other_tags.innerHTML = '';
+    tags_upd_others.innerHTML = '';
     upload_other_tags.innerHTML = '';
     for(var i=0; i<tag_others.length; i++)
     {
@@ -188,6 +202,12 @@ async function Init()
         l.className = 'label_tag';
         l.addEventListener('click', tag_clicked);
         d_other_tags.appendChild(l);
+        const l_upd = document.createElement('label');
+        l_upd.innerHTML = tag_others[i].TagName;
+        l_upd.value = tag_others[i].ID;
+        l_upd.className = 'label_tags_upd';
+        l_upd.addEventListener('click', tag_upd_clicked);
+        tags_upd_others.appendChild(l_upd);
         const l_u = document.createElement('label');
         l_u.innerHTML = tag_others[i].TagName;
         l_u.value = tag_others[i].ID;
@@ -218,6 +238,22 @@ function tag_clicked()
         this.className = 'label_tag';
 }
 
+function tag_upd_clicked()
+{
+    if(this.className == 'label_tags_upd')
+    {
+        if(this.parentNode.id == 'tags_upd_spelltower')
+        {
+            const children = this.parentNode.children;
+            for(var i=0; i<children.length; i++)
+                children[i].className = 'label_tags_upd';
+        }
+        this.className = 'label_tags_upd_selected';
+    }
+    else if(this.className == 'label_tags_upd_selected')
+        this.className = 'label_tags_upd';
+}
+
 function tag_upload_clicked()
 {
     if(this.className == 'label_tag_upload')
@@ -234,13 +270,45 @@ function tag_upload_clicked()
         this.className = 'label_tag_upload';
 }
 
+const tags_upd_tag_temp = [];
+function tags_upd_new_tag_added()
+{
+    if(this.value == '')
+        return;
+    var d = null;
+    if(tag_spelltower.findIndex(obj => obj.TagName == this.value) != -1 || tag_others.findIndex(obj => obj.TagName == this.value) != -1 || tags_upd_tag_temp.findIndex(obj => obj.TagName == this.value) != -1)
+    {
+        alert('已有相同名稱之標籤');
+        return;
+    }
+    if(this.id == 'tags_upd_new_spelltower_tag')
+    {
+        d = document.getElementById('tags_upd_spelltower');
+    }
+    else if(this.id == 'tags_upd_new_other_tag')
+    {
+        d = document.getElementById('tags_upd_others');
+    }
+    if(d == null)
+        return;
+    const new_tag = document.createElement('label');
+    new_tag.className = 'label_tags_upd';
+    new_tag.innerHTML = this.value;
+    new_tag.value = -1;
+    new_tag.addEventListener('click', tag_upd_clicked);
+    d.appendChild(new_tag);
+    tags_upd_tag_temp[tags_upd_tag_temp.length] = {
+        "TagName": this.value,
+        "SpellTower": this.id == 'tags_upd_new_spelltower_tag' ? 1 : 0
+    };
+}
+
 const tag_temp = [];
 function new_tag_added()
 {
     if(this.value == '')
         return;
     var d = null;
-    var tmp = null;
     if(tag_spelltower.findIndex(obj => obj.TagName == this.value) != -1 || tag_others.findIndex(obj => obj.TagName == this.value) != -1 || tag_temp.findIndex(obj => obj.TagName == this.value) != -1)
     {
         alert('已有相同名稱之標籤');
@@ -622,6 +690,8 @@ async function getAndModifyDetail(idx)
     const s2 = document.getElementById('lStar2');
     const s1 = document.getElementById('lStar1');
     const s0 = document.getElementById('lStar0');
+    const s_tags = Array.from(document.getElementById('tags_upd_spelltower').children);
+    const o_tags = Array.from(document.getElementById('tags_upd_others').children);
     const oa_tag = document.getElementById('oa_tag');
     oa_tag.innerHTML = '';
     for(var i=0; i<detail.Tags.length; i++)
@@ -630,7 +700,26 @@ async function getAndModifyDetail(idx)
         l.innerHTML = detail.Tags[i].TagName;
         l.value = detail.Tags[i].ID;
         l.className = 'oa_tag_l';
+        l.addEventListener('click', show_modal_tags_upd);
         oa_tag.appendChild(l);
+        var obj = s_tags.find(obj => parseInt(obj.value) == detail.Tags[i].ID);
+        if(obj != null)
+            obj.className = 'label_tags_upd_selected';
+        obj = o_tags.find(obj => parseInt(obj.value) == detail.Tags[i].ID);
+        if(obj != null)
+            obj.className = 'label_tags_upd_selected';
+    }
+    if(detail.Tags.length == 0)
+    {
+        const l = document.createElement('label');
+        l.innerHTML = '無標籤';
+        l.className = 'oa_tag_l_no';
+        l.addEventListener('click', show_modal_tags_upd);
+        oa_tag.appendChild(l);
+        for(var i=0; i<s_tags.length; i++)
+            s_tags[i].className = 'label_tags_upd';
+        for(var i=0; i<o_tags.length; i++)
+            o_tags[i].className = 'label_tags_upd';
     }
 
     s3.innerHTML = detail.Star_3;
@@ -682,6 +771,11 @@ async function getAndModifyDetail(idx)
     const objs = document.querySelectorAll('.history_content');
     for(var i=0; i<objs.length; i++)
         objs[i].addEventListener('click', history_clicked);
+}
+
+function show_modal_tags_upd()
+{
+    document.getElementById('modal_tags_upd').style.display = 'block';
 }
 
 function history_clicked()
@@ -859,6 +953,11 @@ function closeModal() {
     modal.style.display = 'none';
 }
 
+function closeTagsUpd() {
+    const modal = document.getElementById('modal_tags_upd');
+    modal.style.display = 'none';
+}
+
 function closeAttackedModal()
 {
     const modal = document.getElementById('modal_attacked');
@@ -1019,6 +1118,41 @@ async function upload()
         modalAdd.value = baseidx;
     }
     Init();
+}
+
+async function tags_upd_btn_clicked()
+{
+    const baseIdx = parseInt(document.getElementById('modal-LK').value);
+    const selected = document.querySelectorAll('.label_tags_upd_selected');
+    const unSelected = document.querySelectorAll('.label_tags_upd');
+    var content = {
+        "method": "tags_update",
+        "data": {
+            "BaseID": bases[baseIdx].ID,
+            "ExistedTags": [],
+            "NewTags": [],
+            "UnSelectedTags": []
+        }
+    };
+    for(var i=0; i<unSelected.length; i++)
+    {
+        if(unSelected[i].value != -1)
+            content.data.UnSelectedTags[content.data.UnSelectedTags.length] = unSelected[i].value;
+    }
+    for(var i=0; i<selected.length; i++)
+    {
+        if(selected[i].value != -1)
+            content.data.ExistedTags[content.data.ExistedTags.length] = selected[i].value;
+        else
+            content.data.NewTags[content.data.NewTags.length] = selected[i].innerHTML + "-" + tags_upd_tag_temp.find(obj => obj.TagName == selected[i].innerHTML).SpellTower;
+    }
+    var result = await fetchPost(apiUrl, content, 'application/json');
+    if(result[0] == 200)
+    {
+        await Init();
+        await getAndModifyDetail(baseIdx);
+        alert('標籤已更新!');
+    }
 }
 
 async function cal_stars_and_trophy()
