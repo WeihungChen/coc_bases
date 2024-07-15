@@ -64,12 +64,12 @@
                 <input type="text" id="linkInput" placeholder="Enter COC base link...">
                 <div>
                     <label>法術塔標籤</label>
-                    <div id="upload_spelltower_tags"></div>
+                    <div id="upload_spelltower_tags" class="div_tags_label_parent"></div>
                     <div><input type="text" id="new_spelltower_tag" placeholder="輸入需新增之法術塔標籤名稱"></div>
                 </div>
                 <div>
                     <label>其他標籤</label>
-                    <div id="upload_other_tags"></div>
+                    <div id="upload_other_tags" class="div_tags_label_parent"></div>
                     <div><input type="text" id="new_other_tag" placeholder="輸入需新增之標籤名稱"></div>
                 </div>
                 <button id="btnUpload">Upload</button>
@@ -105,9 +105,9 @@
                             <tr><td colspan="3"><label class="label1">排序</label></td></tr>
                             <tr><td colspan="3"><div class="custom-select"><select id="select_sort" style="background-color: rgba(114, 255, 255,0.2)"></select></div></td></tr>
                             <tr><td colspan="3"><label class="label1">法術塔標籤</label></td></tr>
-                            <tr><td colspan="3"><div id="d_tower_tags"></div></td></tr>
+                            <tr><td colspan="3"><div id="d_tower_tags" class="div_tags_label_parent"></div></td></tr>
                             <tr><td colspan="3"><label class="label1">其他標籤</label></td></tr>
-                            <tr><td colspan="3"><div id="d_other_tags"></div></td></tr>
+                            <tr><td colspan="3"><div id="d_other_tags" class="div_tags_label_parent"></div></td></tr>
                         </table>
                     </div>
                 </div>
@@ -144,7 +144,7 @@
                         </div>
                     </div>
                     <div id="OverAllTab" class="modal-tab-content active">
-                        <div class="modal-fixed" id="oa_tag"></div>
+                        <div class="modal-fixed div_tags_label_parent" id="oa_tag"></div>
                         <div class="modal-fixed">
                             <img id="modalImage" src="" alt="">
                         </div>
@@ -218,10 +218,10 @@
                     <table>
                         <tbody style="display: block;">
                             <tr><label>法術塔標籤</label></tr>
-                            <tr><div id="tags_upd_spelltower"></div></tr>
+                            <tr><div id="tags_upd_spelltower" class="div_tags_label_parent"></div></tr>
                             <div><input type="text" id="tags_upd_new_spelltower_tag" placeholder="輸入需新增之法術塔標籤名稱"></div>
                             <tr><label>其他標籤</label></tr>
-                            <tr><div id="tags_upd_others"></div></tr>
+                            <tr><div id="tags_upd_others" class="div_tags_label_parent"></div></tr>
                             <div><input type="text" id="tags_upd_new_other_tag" placeholder="輸入需新增之標籤名稱"></div>
                             <tr><button id="btn-tags-upd">送出</button></tr>
                         </tbody>
