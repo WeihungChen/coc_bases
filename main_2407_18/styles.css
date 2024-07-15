@@ -332,6 +332,17 @@ img {
     border-radius: 5px;
     background-color: #007bff;
     color:rgb(255, 255, 255);
+    cursor: pointer;
+}
+
+.oa_tag_l_no {
+    margin: 3px;
+    padding: 2px;
+    border: 1px solid rgb(21, 0, 255);
+    border-radius: 5px;
+    background-color: rgba(108, 189, 255, 0.3);
+    color:rgb(7, 0, 82);
+    cursor: pointer;
 }
 
 .label_tag_upload {
@@ -345,6 +356,26 @@ img {
 }
 
 .label_tag_upload_selected {
+    margin: 3px;
+    padding: 2px;
+    border: 1px solid rgb(21, 0, 255);
+    border-radius: 5px;
+    background-color: #007bff;
+    color:rgb(255, 255, 255);
+    cursor: pointer;
+}
+
+.label_tags_upd {
+    margin: 3px;
+    padding: 2px;
+    border: 1px solid rgb(21, 0, 255);
+    border-radius: 5px;
+    background-color: rgba(108, 189, 255, 0.3);
+    color:rgb(7, 0, 82);
+    cursor: pointer;
+}
+
+.label_tags_upd_selected {
     margin: 3px;
     padding: 2px;
     border: 1px solid rgb(21, 0, 255);
