@@ -4,6 +4,8 @@ import { DateToString, addCommasToNumber, isNumeric } from "./common/globalFunct
 const apiUrl = serverUrl + "/api";
 var bases = [];
 var current_history = [];
+var tag_spelltower = null;
+var tag_others = null;
 
 document.getElementById('imageUpload').addEventListener('change', ImgAdd);
 document.getElementById('btnUpload').addEventListener('click', upload);
@@ -17,14 +19,6 @@ document.getElementById('attackedImg').addEventListener('change', AttackedImgAdd
 document.getElementById('close_attacked').addEventListener('click', closeAttackedModal);
 document.getElementById('legend_data').addEventListener('click', openLegendData);
 document.getElementById('close_legend_data').addEventListener('click', closeLegendData);
-document.getElementById('select_base').addEventListener('change', queryBases);
-document.getElementById('select_cup1').addEventListener('change', queryBases);
-document.getElementById('select_cup2').addEventListener('change', queryBases);
-document.getElementById('select_date1').addEventListener('change', queryBases);
-document.getElementById('select_date2').addEventListener('change', queryBases);
-document.getElementById('select_use_date1').addEventListener('change', queryBases);
-document.getElementById('select_use_date2').addEventListener('change', queryBases);
-document.getElementById('select_sort').addEventListener('change', queryBases);
 document.getElementById('select_person').addEventListener('change', SelectPersonChanged);
 document.getElementById('select_legend_person').addEventListener('change', SelectLegendPersonChanged);
 document.getElementById('select_legend_season').addEventListener('change', SelectLegendSeasonChanged);
@@ -36,6 +30,7 @@ document.getElementById('s_cup').addEventListener('click', show_select_base);
 document.getElementById('s_date').addEventListener('click', show_select_base);
 document.getElementById('s_use_date').addEventListener('click', show_select_base);
 document.getElementById('s_sort').addEventListener('click', show_select_base);
+document.getElementById('s_tags').addEventListener('click', show_select_base);
 document.getElementById('close_base_select').addEventListener('click', closeBaseSelect);
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -156,6 +151,34 @@ async function Init()
         opt_legend_data.innerHTML = people[i].Name;
         select_legend_person.appendChild(opt_legend_data);
     }
+
+    console.log(result[1]);
+    tag_spelltower = result[1].Tag_SpellTower;
+    const d_tower_tags = document.getElementById('d_tower_tags');
+    d_tower_tags.innerHTML = '';
+    for(var i=0; i<tag_spelltower.length; i++)
+    {
+        const l = document.createElement('label');
+        l.innerHTML = tag_spelltower[i].TagName;
+        l.value = tag_spelltower[i].ID;
+        l.className = 'label_tag';
+        l.addEventListener('click', tag_clicked);
+        d_tower_tags.appendChild(l);
+    }
+    tag_others = result[1].Tag_Others;
+    const d_other_tags = document.getElementById('d_other_tags');
+    d_other_tags.innerHTML = '';
+    for(var i=0; i<tag_others.length; i++)
+    {
+        const l = document.createElement('label');
+        l.innerHTML = tag_others[i].TagName;
+        l.value = tag_others[i].ID;
+        l.className = 'label_tag';
+        l.addEventListener('click', tag_clicked);
+        d_other_tags.appendChild(l);
+    }
+    document.getElementById('s_tags').innerHTML = "標籤: 無";
+
     select_person.dispatchEvent(new Event('change'));
     select_legend_person.dispatchEvent(new Event('change'));
     bases = result[1].Bases;
@@ -167,6 +190,14 @@ async function Init()
     document.getElementById('s_cup').innerHTML = "盃段: " + cup1 + " ~ " + cup2;
     document.getElementById('s_date').innerHTML = "上傳時間: All";
     document.getElementById('s_use_date').innerHTML = "使用期間: " + result[1].Use_Start_Date + " ~ " + result[1].Use_End_Date;
+}
+
+function tag_clicked()
+{
+    if(this.className == 'label_tag')
+        this.className = 'label_tag_selected';
+    else if(this.className == 'label_tag_selected')
+        this.className = 'label_tag';
 }
 
 function InitInputObj()
@@ -358,6 +389,7 @@ async function queryBases()
     const select_use_date1 = document.getElementById('select_use_date1').value;
     const select_use_date2 = document.getElementById('select_use_date2').value;
     const select_sort = parseInt(document.getElementById('select_sort').value);
+    const select_tag = document.querySelectorAll('.label_tag_selected');
     var content = {
         "method": "th_change",
         "data": {
@@ -368,9 +400,22 @@ async function queryBases()
             "End_Date": select_date2 == '' ? null : select_date2,
             "Use_Start_Date": select_use_date1 == '' ? null : select_use_date1,
             "Use_End_Date": select_use_date2 == '' ? null : select_use_date2,
-            "Sort_Category": select_sort
+            "Sort_Category": select_sort,
+            "Tags": null
         }
     };
+    var label_tags = '';
+    if(select_tag.length > 0)
+    {
+        content.data.Tags = [];
+        for(var i=0; i<select_tag.length; i++)
+        {
+            content.data.Tags[content.data.Tags.length] = select_tag[i].value;
+            label_tags += select_tag[i].innerHTML;
+            if(i < select_tag.length - 1)
+                label_tags += ",";
+        }
+    }
     var result = await fetchPost(apiUrl, content, 'application/json');
     if(result[0] != 200 || result[1] == null || result[1].Bases == null)
         return;
@@ -400,6 +445,7 @@ async function queryBases()
             useDT = '~ ' + select_use_date2;
     }
     document.getElementById('s_use_date').innerHTML = "使用期間: " + useDT;
+    document.getElementById('s_tags').innerHTML = "標籤: " + label_tags;
 }
 
 async function showBases()
@@ -750,6 +796,7 @@ function closeBaseSelect()
 {
     const modal = document.getElementById('modal_base_select');
     modal.style.display = 'none';
+    queryBases();
 }
 
 function openLegendData()

@@ -48,14 +48,12 @@ body {
     max-height: 100vh;
 }
 
-#select_td {
-    width:20%;
-    max-width: 20vh;
+.select_td {
     background-color: rgba(77, 163, 255, 0.2);
     border-radius: 8px;
 }
 
-#select_td label {
+.select_td label {
     cursor: pointer;
 }
 
@@ -305,6 +303,26 @@ img {
     transform: translateY(-50%);
     pointer-events: none;
     color: #666666;
+}
+
+.label_tag {
+    margin: 3px;
+    padding: 2px;
+    border: 1px solid rgb(21, 0, 255);
+    border-radius: 5px;
+    background-color: rgba(108, 189, 255, 0.3);
+    color:rgb(7, 0, 82);
+    cursor: pointer;
+}
+
+.label_tag_selected {
+    margin: 3px;
+    padding: 2px;
+    border: 1px solid rgb(21, 0, 255);
+    border-radius: 5px;
+    background-color: #007bff;
+    color:rgb(255, 255, 255);
+    cursor: pointer;
 }
 
 #select_base {
