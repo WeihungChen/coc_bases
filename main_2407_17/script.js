@@ -32,6 +32,8 @@ document.getElementById('s_use_date').addEventListener('click', show_select_base
 document.getElementById('s_sort').addEventListener('click', show_select_base);
 document.getElementById('s_tags').addEventListener('click', show_select_base);
 document.getElementById('close_base_select').addEventListener('click', closeBaseSelect);
+document.getElementById('new_spelltower_tag').addEventListener('change', new_tag_added);
+document.getElementById('new_other_tag').addEventListener('change', new_tag_added);
 
 document.addEventListener("DOMContentLoaded", function() {
     const tabs = document.querySelectorAll(".tab");
@@ -152,10 +154,12 @@ async function Init()
         select_legend_person.appendChild(opt_legend_data);
     }
 
-    console.log(result[1]);
+    tag_temp.length = 0;
     tag_spelltower = result[1].Tag_SpellTower;
     const d_tower_tags = document.getElementById('d_tower_tags');
+    const upload_spelltower_tags = document.getElementById('upload_spelltower_tags');
     d_tower_tags.innerHTML = '';
+    upload_spelltower_tags.innerHTML = '';
     for(var i=0; i<tag_spelltower.length; i++)
     {
         const l = document.createElement('label');
@@ -164,10 +168,18 @@ async function Init()
         l.className = 'label_tag';
         l.addEventListener('click', tag_clicked);
         d_tower_tags.appendChild(l);
+        const l_u = document.createElement('label');
+        l_u.innerHTML = tag_spelltower[i].TagName;
+        l_u.value = tag_spelltower[i].ID;
+        l_u.className = 'label_tag_upload';
+        l_u.addEventListener('click', tag_upload_clicked);
+        upload_spelltower_tags.appendChild(l_u);
     }
     tag_others = result[1].Tag_Others;
     const d_other_tags = document.getElementById('d_other_tags');
+    const upload_other_tags = document.getElementById('upload_other_tags');
     d_other_tags.innerHTML = '';
+    upload_other_tags.innerHTML = '';
     for(var i=0; i<tag_others.length; i++)
     {
         const l = document.createElement('label');
@@ -176,6 +188,12 @@ async function Init()
         l.className = 'label_tag';
         l.addEventListener('click', tag_clicked);
         d_other_tags.appendChild(l);
+        const l_u = document.createElement('label');
+        l_u.innerHTML = tag_others[i].TagName;
+        l_u.value = tag_others[i].ID;
+        l_u.className = 'label_tag_upload';
+        l_u.addEventListener('click', tag_upload_clicked);
+        upload_other_tags.appendChild(l_u);
     }
     document.getElementById('s_tags').innerHTML = "標籤: 無";
 
@@ -198,6 +216,48 @@ function tag_clicked()
         this.className = 'label_tag_selected';
     else if(this.className == 'label_tag_selected')
         this.className = 'label_tag';
+}
+
+function tag_upload_clicked()
+{
+    if(this.className == 'label_tag_upload')
+        this.className = 'label_tag_upload_selected';
+    else if(this.className == 'label_tag_upload_selected')
+        this.className = 'label_tag_upload';
+}
+
+const tag_temp = [];
+function new_tag_added()
+{
+    if(this.value == '')
+        return;
+    var d = null;
+    var tmp = null;
+    if(tag_spelltower.findIndex(obj => obj.TagName == this.value) != -1 || tag_others.findIndex(obj => obj.TagName == this.value) != -1 || tag_temp.findIndex(obj => obj.TagName == this.value) != -1)
+    {
+        alert('已有相同名稱之標籤');
+        return;
+    }
+    if(this.id == 'new_spelltower_tag')
+    {
+        d = document.getElementById('upload_spelltower_tags');
+    }
+    else if(this.id == 'new_other_tag')
+    {
+        d = document.getElementById('upload_other_tags');
+    }
+    if(d == null)
+        return;
+    const new_tag = document.createElement('label');
+    new_tag.className = 'label_tag_upload';
+    new_tag.innerHTML = this.value;
+    new_tag.value = -1;
+    new_tag.addEventListener('click', tag_upload_clicked);
+    d.appendChild(new_tag);
+    tag_temp[tag_temp.length] = {
+        "TagName": this.value,
+        "SpellTower": this.id == 'new_spelltower_tag' ? 1 : 0
+    };
 }
 
 function InitInputObj()
@@ -900,10 +960,21 @@ async function upload()
         alert('Please choose the base image');
         return;
     }
-
+    const tags = document.querySelectorAll('.label_tag_upload_selected');
+    var uploadExistedTags = '';
+    var uploadNewTags = '';
+    for(var i=0; i<tags.length; i++)
+    {
+        if(tags[i].value == -1)
+            uploadNewTags += (uploadNewTags == '' ? "" : ",") + tags[i].innerHTML + "-" + tag_temp.find(obj => obj.TagName == tags[i].innerHTML).SpellTower;
+        else
+            uploadExistedTags += (uploadExistedTags == '' ? "" : ",") + tags[i].value;
+    }
     const formData = new FormData();
     formData.append('file', imageUpload.files[0]);
     formData.append('url', linkUrl);
+    formData.append('existedTags', uploadExistedTags);
+    formData.append('newTags', uploadNewTags);
     var content = formData;
     var result = await fetchPost(apiUrl + "/upload", content);
     if(result[0] == 200)
