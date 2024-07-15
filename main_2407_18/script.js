@@ -221,7 +221,15 @@ function tag_clicked()
 function tag_upload_clicked()
 {
     if(this.className == 'label_tag_upload')
+    {
+        if(this.parentNode.id == 'upload_spelltower_tags')
+        {
+            const children = this.parentNode.children;
+            for(var i=0; i<children.length; i++)
+                children[i].className = 'label_tag_upload';
+        }
         this.className = 'label_tag_upload_selected';
+    }
     else if(this.className == 'label_tag_upload_selected')
         this.className = 'label_tag_upload';
 }
@@ -586,7 +594,8 @@ async function getBaseDetail(idx)
             "Star_2": 0,
             "Star_1": 0,
             "Star_0": 0,
-            "History": []
+            "History": [],
+            "Tags": []
         };
     }
 }
@@ -613,6 +622,16 @@ async function getAndModifyDetail(idx)
     const s2 = document.getElementById('lStar2');
     const s1 = document.getElementById('lStar1');
     const s0 = document.getElementById('lStar0');
+    const oa_tag = document.getElementById('oa_tag');
+    oa_tag.innerHTML = '';
+    for(var i=0; i<detail.Tags.length; i++)
+    {
+        const l = document.createElement('label');
+        l.innerHTML = detail.Tags[i].TagName;
+        l.value = detail.Tags[i].ID;
+        l.className = 'oa_tag_l';
+        oa_tag.appendChild(l);
+    }
 
     s3.innerHTML = detail.Star_3;
     s2.innerHTML = detail.Star_2;
@@ -963,12 +982,20 @@ async function upload()
     const tags = document.querySelectorAll('.label_tag_upload_selected');
     var uploadExistedTags = '';
     var uploadNewTags = '';
+    var spelltower_tag_count = 0;
     for(var i=0; i<tags.length; i++)
     {
         if(tags[i].value == -1)
             uploadNewTags += (uploadNewTags == '' ? "" : ",") + tags[i].innerHTML + "-" + tag_temp.find(obj => obj.TagName == tags[i].innerHTML).SpellTower;
         else
             uploadExistedTags += (uploadExistedTags == '' ? "" : ",") + tags[i].value;
+        if(tags[i].parentNode.id == 'upload_spelltower_tags')
+            spelltower_tag_count++;
+    }
+    if(spelltower_tag_count != 1)
+    {
+        alert('法術塔標籤需選1個');
+        return;
     }
     const formData = new FormData();
     formData.append('file', imageUpload.files[0]);

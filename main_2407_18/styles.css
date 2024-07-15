@@ -325,6 +325,15 @@ img {
     cursor: pointer;
 }
 
+.oa_tag_l {
+    margin: 3px;
+    padding: 2px;
+    border: 1px solid rgb(21, 0, 255);
+    border-radius: 5px;
+    background-color: #007bff;
+    color:rgb(255, 255, 255);
+}
+
 .label_tag_upload {
     margin: 3px;
     padding: 2px;
