@@ -694,6 +694,10 @@ async function getAndModifyDetail(idx)
     const o_tags = Array.from(document.getElementById('tags_upd_others').children);
     const oa_tag = document.getElementById('oa_tag');
     oa_tag.innerHTML = '';
+    for(var i=0; i<s_tags.length; i++)
+        s_tags[i].className = 'label_tags_upd';
+    for(var i=0; i<o_tags.length; i++)
+        o_tags[i].className = 'label_tags_upd';
     for(var i=0; i<detail.Tags.length; i++)
     {
         const l = document.createElement('label');
@@ -890,7 +894,6 @@ async function modalAddRecord()
         const modalLink = document.getElementById('modal-LK');
         getAndModifyDetail(modalLink.value);
         GetPeople();
-        document.getElementById('select_person').dispatchEvent(new Event('change'));
         alert('最新數據已更新');
     }
     else if(result[0] == 300)
@@ -911,7 +914,6 @@ async function CoverPreviousRecord(formData)
         const modalLink = document.getElementById('modal-LK');
         getAndModifyDetail(modalLink.value);
         GetPeople();
-        document.getElementById('select_person').dispatchEvent(new Event('change'));
         alert('數據已更新');
     }
 }
