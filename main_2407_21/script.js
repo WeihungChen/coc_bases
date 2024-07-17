@@ -611,6 +611,12 @@ async function showBases()
         td3.innerHTML = '三星率: ' + (bases[i].Rate_3 == null ? 0 : Math.round(bases[i].Rate_3 * 10000) / 100) + ' %';
         tr1.appendChild(td3);
         tr1.className = 'base_middle';
+        const tr3 = document.createElement('tr');
+        const td5 = document.createElement('td');
+        td5.innerHTML = 'Avg. DEF: ' + (bases[i].AvgDEF == null ? 0 : bases[i].AvgDEF);
+        td5.colSpan = 2;
+        tr3.appendChild(td5);
+        tr3.className = 'base_middle';
         const tr2 = document.createElement('tr');
         const td4 = document.createElement('td');
         td4.innerHTML = '上傳時間:' + DateToString(new Date(bases[i].UploadTime));
@@ -619,6 +625,7 @@ async function showBases()
         tr2.className = 'base_bottom';
         table_base.appendChild(tr);
         table_base.appendChild(tr1);
+        table_base.appendChild(tr3);
         table_base.appendChild(tr2);
     }
 }
