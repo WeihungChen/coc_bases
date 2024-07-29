@@ -594,3 +594,8 @@ img {
     color: white;
     cursor: default;
 }
+
+.linechart {
+    width: 100%;
+    height: 300px;
+}

@@ -39,6 +39,13 @@ document.getElementById('tags_upd_new_spelltower_tag').addEventListener('change'
 document.getElementById('tags_upd_new_other_tag').addEventListener('change', tags_upd_new_tag_added);
 document.getElementById('btn-tags-upd').addEventListener('click', tags_upd_btn_clicked);
 
+function LoadChartComponent()
+{
+	var link_chart = document.createElement('script');
+	link_chart.src = 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js';
+	document.head.appendChild(link_chart);
+}
+
 document.addEventListener("DOMContentLoaded", function() {
     const tabs = document.querySelectorAll(".tab");
     const tabContents = document.querySelectorAll(".tab-content");
@@ -82,6 +89,7 @@ Init();
 var players = new Map();
 async function Init()
 {
+    LoadChartComponent();
     var content = {
         "method": "init"
     };
@@ -361,6 +369,14 @@ async function SelectLegendSeasonChanged()
     if(result[0] == 200)
     {
         const ret = result[1];
+        const chartData = new Map();
+        var maxDay = 0;
+        for(var i=0; i<ret.History.length; i++)
+        {
+            if(maxDay == 0)
+                maxDay = ret.History[i].Day;
+            chartData[ret.History[i].Day] = [ret.History[i].FinalTrophies];
+        }
         document.getElementById('avgATK').innerHTML = 'Avg. ATK: ' + ret.AvgGain;
         document.getElementById('avgDEF').innerHTML = 'Avg. DEF: ' + ret.AvgLoss;
         const body_legend_data = document.getElementById('body_legend_data');
@@ -390,7 +406,10 @@ async function SelectLegendSeasonChanged()
             const cFinal = row.insertCell(-1);
             cFinal.innerHTML = ret.Legends[i].FinalTrophies;
             cFinal.className = 'legend_content';
+
+            chartData[ret.Legends[i].Day][chartData[ret.Legends[i].Day].length] = ret.Legends[i].FinalTrophies;
         }
+        DrawChart(chartData, maxDay);
     }
 }
 
@@ -1221,4 +1240,60 @@ function add_player_tag_change()
 function show_select_base()
 {
     document.getElementById('modal_base_select').style.display = 'block';
+}
+
+var assetChart = null;
+function DrawChart(data, maxDay)
+{
+    const days = [];
+    const his = [];
+    const cur = [];
+    const lineColor = ['rgba(68, 68, 68, 0.5)', 'rgba(0, 123, 255, 0.7)'];
+    const hoverColor = ['rgba(255, 0, 0, 0.7)', 'rgba(68, 68, 68, 0.3)'];
+    const hoverColor1 = ['rgba(0, 213, 255, 1)', 'rgba(0, 255, 213, 0.8)'];
+
+    for(var i=1; i<=maxDay; i++)
+    {
+        days[days.length] = i;
+        his[his.length] = (data[i] == null || data[i][0] == null) ? null : data[i][0];
+        cur[cur.length] = (data[i] == null || data[i][1] == null) ? null : data[i][1];
+    }
+
+    var ctx = document.getElementById('legend_linechart');
+    if(ctx == null)
+        return;
+	ctx.getContext('2d');
+	if(assetChart)
+        assetChart.destroy();
+    assetChart = new Chart(ctx, {
+  		// 參數設定[註1]
+  		type: "line", // 圖表類型
+  		data: {
+  			labels: days, // 標題
+  			datasets: [{
+  				label: 'Avg', // 標籤
+  				data: his, // 資料
+  				borderWidth: 2, // 外框寬度
+                borderColor: lineColor[0],
+                fill: false,
+                pointBorderColor: lineColor[0],
+                pointBackgroundColor: lineColor[0],
+                pointHoverBorderColor: hoverColor[0],
+                pointHoverBackgroundColor: hoverColor[1]
+  			}, {
+                label: '本季', // 標籤
+  				data: cur, // 資料
+  				borderWidth: 2, // 外框寬度
+                borderColor: lineColor[1],
+                fill: false,
+                pointBorderColor: lineColor[1],
+                pointBackgroundColor: lineColor[1],
+                pointHoverBorderColor: hoverColor1[0],
+                pointHoverBackgroundColor: hoverColor1[1]
+            }]
+  		},
+		options: {
+			maintainAspectRatio: false
+		}
+  	});
 }
