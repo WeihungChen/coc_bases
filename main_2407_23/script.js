@@ -6,6 +6,7 @@ var bases = [];
 var current_history = [];
 var tag_spelltower = null;
 var tag_others = null;
+var first = true;
 
 document.getElementById('imageUpload').addEventListener('change', ImgAdd);
 document.getElementById('btnUpload').addEventListener('click', upload);
@@ -89,7 +90,12 @@ Init();
 var players = new Map();
 async function Init()
 {
-    LoadChartComponent();
+    if(first)
+    {
+        LoadChartComponent();
+        first = false;
+    }
+    
     var content = {
         "method": "init"
     };
@@ -429,6 +435,13 @@ async function SelectLegendPersonChanged()
     var result = await fetchPost(apiUrl, content, 'application/json');
     if(result[0] == 200)
     {
+        if(result[1].length == 0)
+        {
+            document.getElementById('body_legend_data').innerHTML = '';
+            document.getElementById('avgATK').innerHTML = 'Avg. ATK: -';
+            document.getElementById('avgDEF').innerHTML = 'Avg. DEF: -';
+            return;
+        }
         for(var i=0; i<result[1].length; i++)
         {
             const opt = document.createElement('option');
@@ -920,6 +933,7 @@ async function modalAddRecord()
         const modalLink = document.getElementById('modal-LK');
         getAndModifyDetail(modalLink.value);
         GetPeople();
+        Init();
         alert('最新數據已更新');
     }
     else if(result[0] == 300)
