@@ -196,6 +196,33 @@ th {
     background-color: rgba(160,241,255,0.2);
     padding: 5px;
     margin: 5px;
+    cursor: pointer;
+}
+
+.legend_modify_title {
+    background-color: rgba(42, 108, 222, 0.3);
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.legend_modify_total {
+    background-color: rgba(42, 195, 222, 0.3);
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.legend_content_modify {
+    background-color: rgba(160,241,255,0.2);
+    padding: 5px;
+    margin: 5px;
+}
+
+.legend_content_modify_input {
+    background-color: rgba(0,0,0,0);
+    margin: 0px;
+    border: 0px;
+    text-align: center;
+    font-family: DFKai-sb;
 }
 
 .small-print {

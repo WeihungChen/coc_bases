@@ -20,6 +20,7 @@ document.getElementById('attackedImg').addEventListener('change', AttackedImgAdd
 document.getElementById('close_attacked').addEventListener('click', closeAttackedModal);
 document.getElementById('legend_data').addEventListener('click', openLegendData);
 document.getElementById('close_legend_data').addEventListener('click', closeLegendData);
+document.getElementById('close_legend_data_modify').addEventListener('click', closeLegendDataModify);
 document.getElementById('close_tags_upd').addEventListener('click', closeTagsUpd);
 document.getElementById('select_person').addEventListener('change', SelectPersonChanged);
 document.getElementById('select_legend_person').addEventListener('change', SelectLegendPersonChanged);
@@ -39,6 +40,7 @@ document.getElementById('new_other_tag').addEventListener('change', new_tag_adde
 document.getElementById('tags_upd_new_spelltower_tag').addEventListener('change', tags_upd_new_tag_added);
 document.getElementById('tags_upd_new_other_tag').addEventListener('change', tags_upd_new_tag_added);
 document.getElementById('btn-tags-upd').addEventListener('click', tags_upd_btn_clicked);
+document.getElementById('btn_save_legend_data_modify').addEventListener('click', Save_Legend_Data_Modify);
 
 function LoadChartComponent()
 {
@@ -242,6 +244,10 @@ async function Init()
     document.getElementById('s_cup').innerHTML = "盃段: " + cup1 + " ~ " + cup2;
     document.getElementById('s_date').innerHTML = "上傳時間: All";
     document.getElementById('s_use_date').innerHTML = "使用期間: " + result[1].Use_Start_Date + " ~ " + result[1].Use_End_Date;
+
+    const legend_modify_input = document.querySelectorAll('.legend_content_modify_input');
+    for(var i=0; i<legend_modify_input.length; i++)
+        legend_modify_input[i].addEventListener('change', Legend_Data_Changed);
 }
 
 function tag_clicked()
@@ -393,30 +399,60 @@ async function SelectLegendSeasonChanged()
             const cDay = row.insertCell(-1);
             cDay.innerHTML = ret.Legends[i].Day;
             cDay.className = 'legend_content';
+            cDay.value = ret.Legends[i].Date;
+            cDay.addEventListener('click', ShowModifyLegendDataPage);
             const cDT = row.insertCell(-1);
             cDT.innerHTML = ret.Legends[i].Date;
             cDT.className = 'legend_content';
             cDT.colSpan = 2;
+            cDT.value = ret.Legends[i].Date;
+            cDT.addEventListener('click', ShowModifyLegendDataPage);
             const cInit = row.insertCell(-1);
             cInit.innerHTML = ret.Legends[i].InitTrophies;
             cInit.className = 'legend_content';
+            cInit.value = ret.Legends[i].Date;
+            cInit.addEventListener('click', ShowModifyLegendDataPage);
             const cGain = row.insertCell(-1);
             cGain.innerHTML = ret.Legends[i].GainTrophy + ' <label class="small-print">' + ret.Legends[i].Attacks.length + '</label>';
             cGain.className = 'legend_content';
+            cGain.value = ret.Legends[i].Date;
+            cGain.addEventListener('click', ShowModifyLegendDataPage);
             const cLoss = row.insertCell(-1);
             cLoss.innerHTML = ret.Legends[i].LossTrophy + ' <label class="small-print">' + ret.Legends[i].Defenses.length + '</label>';
             cLoss.className = 'legend_content';
+            cLoss.value = ret.Legends[i].Date;
+            cLoss.addEventListener('click', ShowModifyLegendDataPage);
             const cDif = row.insertCell(-1);
             cDif.innerHTML = ret.Legends[i].Dif;
             cDif.className = 'legend_content';
+            cDif.value = ret.Legends[i].Date;
+            cDif.addEventListener('click', ShowModifyLegendDataPage);
             const cFinal = row.insertCell(-1);
             cFinal.innerHTML = ret.Legends[i].FinalTrophies;
             cFinal.className = 'legend_content';
+            cFinal.value = ret.Legends[i].Date;
+            cFinal.addEventListener('click', ShowModifyLegendDataPage);
 
             chartData[ret.Legends[i].Day][chartData[ret.Legends[i].Day].length] = ret.Legends[i].FinalTrophies;
         }
         DrawChart(chartData, maxDay);
     }
+}
+
+async function ShowModifyLegendDataPage()
+{
+    const tag = document.getElementById('select_legend_person').value;
+    const date = this.value;
+    var content = {
+        "method": "get_legends_data_by_date",
+        "data": {
+            "Tag": tag,
+            "Date": date
+        }
+    };
+    var result = await fetchPost(apiUrl, content, 'application/json');
+    if(result[0] == 200)
+        openLegendDataModify(result[1]);
 }
 
 async function SelectLegendPersonChanged()
@@ -1012,6 +1048,12 @@ function closeLegendData()
     modal.style.display = 'none';
 }
 
+function closeLegendDataModify()
+{
+    const modal = document.getElementById('modal_legend_data_modify');
+    modal.style.display = 'none';
+}
+
 function closeBaseSelect()
 {
     const modal = document.getElementById('modal_base_select');
@@ -1024,6 +1066,90 @@ function openLegendData()
     document.getElementById('select_legend_person').dispatchEvent(new Event('change'));
     const modal = document.getElementById('modal_legend_data');
     modal.style.display = 'block';
+}
+
+function openLegendDataModify(data)
+{
+    const opts = document.querySelectorAll('.legend_content_modify_input');
+    for(var i=0; i<opts.length; i++)
+        opts[i].value = '';
+
+    document.getElementById('legend_modify_name').innerHTML = data.Name;
+    document.getElementById('legend_modify_date').innerHTML = data.Date;
+    document.getElementById('legend_modify_total_atk').innerHTML = data.GainTrophy;
+    document.getElementById('legend_modify_total_def').innerHTML = data.LossTrophy;
+    for(var i=0; i<data.Attacks.length; i++)
+    {
+        document.getElementById('atk_' + (i+1)).value = data.Attacks[i];
+    }
+    for(var i=0; i<data.Defenses.length; i++)
+    {
+        document.getElementById('def_' + (i+1)).value = data.Defenses[i];
+    }
+    const modal = document.getElementById('modal_legend_data_modify');
+    modal.style.display = 'block';
+}
+
+async function Save_Legend_Data_Modify()
+{
+    var atks = '';
+    var defs = '';
+    for(var i=1; i<=8; i++)
+    {
+        const atkObj = document.getElementById('atk_' + i);
+        const defObj = document.getElementById('def_' + i);
+        if(isNumeric(atkObj.value))
+        {
+            if(atks != '')
+                atks += ',';
+            atks += atkObj.value;
+        }
+        if(isNumeric(defObj.value))
+        {
+            if(defs != '')
+                defs += ',';
+            defs += defObj.value;
+        }
+    }
+    var content = {
+        "method": "modify_legends_data_by_date",
+        "data": {
+            "Name": document.getElementById('legend_modify_name').innerHTML,
+            "Date": document.getElementById('legend_modify_date').innerHTML,
+            "GainTrophy": document.getElementById('legend_modify_total_atk').innerHTML,
+            "LossTrophy": document.getElementById('legend_modify_total_def').innerHTML,
+            "Attacks": atks,
+            "Defenses": defs
+        }
+    };
+    var result = await fetchPost(apiUrl, content, 'application/json');
+    if(result[0] == 200)
+    {
+        alert('資料已儲存!');
+        document.getElementById('select_legend_season').dispatchEvent(new Event('change'));
+    }
+}
+
+function Legend_Data_Changed()
+{
+    if(!isNumeric(this.value) || parseInt(this.value) > 40 || parseInt(this.value) < 0)
+    {
+        this.value = '';
+        return;
+    }
+    var key = '';
+    if(this.id.includes('atk'))
+        key = 'atk';
+    else
+        key = 'def';
+    var total = 0;
+    for(var i=1; i<=8; i++)
+    {
+        const obj = document.getElementById(key + '_' + i);
+        if(isNumeric(obj.value))
+            total += parseInt(obj.value);
+    }
+    document.getElementById('legend_modify_total_' + key).innerHTML = total;
 }
 
 function tabAdd() {
