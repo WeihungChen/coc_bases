@@ -1080,10 +1080,14 @@ function openLegendDataModify(data)
     document.getElementById('legend_modify_total_def').innerHTML = data.LossTrophy;
     for(var i=0; i<data.Attacks.length; i++)
     {
+        if(i >= 8)
+            break;
         document.getElementById('atk_' + (i+1)).value = data.Attacks[i];
     }
     for(var i=0; i<data.Defenses.length; i++)
     {
+        if(i >= 8)
+            break;
         document.getElementById('def_' + (i+1)).value = data.Defenses[i];
     }
     const modal = document.getElementById('modal_legend_data_modify');
