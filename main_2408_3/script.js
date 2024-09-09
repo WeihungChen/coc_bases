@@ -505,41 +505,48 @@ async function SelectPersonChanged()
         const his = result[1].His;
         for(var i=0; i<his.length; i++)
         {
+            var picString = '';
+            for(var j=0; j<his[i].Pic.length; j++)
+            {
+                if(j > 0)
+                    picString += ',';
+                picString += his[i].Pic[j];
+            }
             const row = personal_history_body.insertRow(-1);
             const cDate = row.insertCell(-1);
             cDate.id = 'person_' + i + '_date';
             cDate.innerHTML = DateToString(new Date(his[i].Date)).substring(0,10);
-            cDate.value = his[i].BaseID + "_" + his[i].Pic;
+            cDate.value = his[i].BaseID + "_" + picString;
             cDate.className = 'person_history';
             const cCup = row.insertCell(-1);
             cCup.id = 'person_' + i + "_cup";
             cCup.innerHTML = his[i].Cup;
-            cCup.value = his[i].BaseID + "_" + his[i].Pic;
+            cCup.value = his[i].BaseID + "_" + picString;
             cCup.className = 'person_history';
             const cReduceTrophy = row.insertCell(-1);
             cReduceTrophy.id = 'person_' + i + "_reducetrophy";
             cReduceTrophy.innerHTML = his[i].ReduceTrophy == null ? '-' : his[i].ReduceTrophy;
-            cReduceTrophy.value = his[i].BaseID + "_" + his[i].Pic;
+            cReduceTrophy.value = his[i].BaseID + "_" + picString;
             cReduceTrophy.className = 'person_history';
             const cStar3 = row.insertCell(-1);
             cStar3.id = 'person_' + i + "_star3";
             cStar3.innerHTML = his[i].Star_3;
-            cStar3.value = his[i].BaseID + "_" + his[i].Pic;
+            cStar3.value = his[i].BaseID + "_" + picString;
             cStar3.className = 'person_history';
             const cStar2 = row.insertCell(-1);
             cStar2.id = 'person_' + i + "_star2";
             cStar2.innerHTML = his[i].Star_2;
-            cStar2.value = his[i].BaseID + "_" + his[i].Pic;
+            cStar2.value = his[i].BaseID + "_" + picString;
             cStar2.className = 'person_history';
             const cStar1 = row.insertCell(-1);
             cStar1.id = 'person_' + i + "_star1";
             cStar1.innerHTML = his[i].Star_1;
-            cStar1.value = his[i].BaseID + "_" + his[i].Pic;
+            cStar1.value = his[i].BaseID + "_" + picString;
             cStar1.className = 'person_history';
             const cStar0 = row.insertCell(-1);
             cStar0.id = 'person_' + i + "_star0";
             cStar0.innerHTML = his[i].Star_0;
-            cStar0.value = his[i].BaseID + "_" + his[i].Pic;
+            cStar0.value = his[i].BaseID + "_" + picString;
             cStar0.className = 'person_history';
         }
         const objs = document.querySelectorAll('.person_history');
@@ -552,11 +559,12 @@ function personalHistoryClicked()
 {
     const baseID = this.value.split('_')[0];
     const baseidx = bases.findIndex(obj => obj.ID == baseID);
-    const pic = this.value.split('_')[1];
+    const pic = this.value.split('_')[1].split(',');
     const modal = document.getElementById('modal');
     const modalImage = document.getElementById('modalImage');
     const modalLink = document.getElementById('modal-LK');
     const modalAdd = document.getElementById('modal-add-record');
+    modalImage.value = '';
 
     const idx = this.id.split('_')[1];
     const name = document.getElementById('select_person').value;
@@ -569,7 +577,18 @@ function personalHistoryClicked()
     document.getElementById('personal_clicked_reducetrophy').innerHTML = reducetrophy;
 
     document.getElementById('personal_attacked_img_div').style.display = 'flex';
-    document.getElementById('personal_attacked_img').src = pic;
+    if(pic.length > 0)
+        document.getElementById('personal_attacked_img').src = pic[0];
+    else
+        document.getElementById('personal_attacked_img').src = '';
+    if(pic.length > 1)
+        document.getElementById('personal_attacked_img1').src = pic[1];
+    else
+        document.getElementById('personal_attacked_img1').src = '';
+    if(pic.length > 2)
+        document.getElementById('personal_attacked_img2').src = pic[2];
+    else
+        document.getElementById('personal_attacked_img2').src = '';
     document.getElementById('tabOverAll').dispatchEvent(new Event('click'));
     modal.style.display = 'block';
     modalImage.src = bases[baseidx].Pic;
@@ -864,7 +883,18 @@ function history_clicked()
         alert('Error!!');
         return;
     }
-    document.getElementById('modalAttackedImage').src = current_history[this.value].Pic;
+    if(current_history[this.value].Pic.length > 0)
+        document.getElementById('modalAttackedImage').src = current_history[this.value].Pic[0];
+    else
+        document.getElementById('modalAttackedImage').src = '';
+    if(current_history[this.value].Pic.length > 1)
+        document.getElementById('modalAttackedImage1').src = current_history[this.value].Pic[1];
+    else
+        document.getElementById('modalAttackedImage1').src = '';
+    if(current_history[this.value].Pic.length > 2)
+        document.getElementById('modalAttackedImage2').src = current_history[this.value].Pic[2];
+    else
+        document.getElementById('modalAttackedImage2').src = '';
     document.getElementById('attackedName').innerHTML = current_history[this.value].Name;
     document.getElementById('attackedDate').innerHTML = DateToString(new Date(current_history[this.value].Date)).substring(0,10);
     document.getElementById('attackedPairedCup').innerHTML = current_history[this.value].Cup;
@@ -949,9 +979,13 @@ async function modalAddRecord()
         tag = tag.substring(1, tag.length);
     const formData = new FormData();
     if(imageUpload.files.length > 0)
-        formData.append('file', imageUpload.files[0]);
+    {
+        for(var i=0; i<imageUpload.files.length; i++)
+            formData.append('images', imageUpload.files[i]);
+    }
     else
-        formData.append('file', null);
+        formData.append('images', null);
+    
     formData.append('BaseID', bases[this.value].ID);
     formData.append('Name', name);
     formData.append('Tag', tag);
@@ -1191,25 +1225,39 @@ function tabAddPlayer()
     }
 }
 
-function AttackedImgAdd()
+async function AttackedImgAdd()
 {
     const imageUpload = document.getElementById('attackedImg');
-    const displayArea = document.getElementById('attacked_img_display');
+    const displayAreas = document.getElementById('attacked_img_display');
 
-    displayArea.innerHTML = ''; // Clear previous content
+    displayAreas.innerHTML = ''; // Clear previous content
+    if(imageUpload.files.length > 3)
+    {
+        alert('最多上傳3張防守圖!');
+        imageUpload.value = '';
+        return;
+    }
 
     // Display uploaded image if available
-    if (imageUpload.files && imageUpload.files[0]) {
-        const reader = new FileReader();
- 
-        reader.onload = function(e) {
-            const img = document.createElement('img');
-            img.className = "img_display";
-            img.src = e.target.result;
-            displayArea.appendChild(img);
-        };
-
-        reader.readAsDataURL(imageUpload.files[0]);
+    if (imageUpload.files) {
+        const reader = [
+            new FileReader(),
+            new FileReader(),
+            new FileReader()
+        ];
+        for(var i=0; i<imageUpload.files.length; i++)
+        {
+            if(imageUpload.files[i])
+            {
+                reader[i].onload = function(e) {
+                    const img = document.createElement('img');
+                    img.className = "img_display";
+                    img.src = e.target.result;
+                    displayAreas.appendChild(img);
+                };
+                reader[i].readAsDataURL(imageUpload.files[i]);
+            }
+        }
     }
 }
 
