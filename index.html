@@ -133,7 +133,9 @@
                                 <td class="history_content_n_click" id="personal_clicked_cup"></td>
                                 <td class="history_content_n_click" id="personal_clicked_reducetrophy"></td>
                             </tr>
-                            <tr><td colspan="4"><img id="personal_attacked_img" src="" alt="" style="max-height: 300px;"></td></tr>
+                            <tr><td colspan="4"><div class="modal-fixed"><img id="personal_attacked_img" src="" alt="" style="max-height: 300px;"></div></td></tr>
+                            <tr><td colspan="4"><div class="modal-fixed"><img id="personal_attacked_img1" src="" alt="" style="max-height: 300px;"></div></td></tr>
+                            <tr><td colspan="4"><div class="modal-fixed"><img id="personal_attacked_img2" src="" alt="" style="max-height: 300px;"></div></td></tr>
                         </table>
                     </div>
                     
@@ -183,7 +185,7 @@
                                 <tr class="modal-add-items" style="display: none"><td><img src="Star2.png" class="r_label"></td><td><input type="number" id="lStar2_r" class="r" value="0"></td></tr>
                                 <tr class="modal-add-items" style="display: none"><td><img src="Star1.png" class="r_label"></td><td><input type="number" id="lStar1_r" class="r" value="0"></td></tr>
                                 <tr class="modal-add-items" style="display: none"><td><img src="Star0.png" class="r_label"></td><td><input type="number" id="lStar0_r" class="r" value="0"></td></tr>
-                                <tr class="modal-add-items" style="display: none"><td class="r_label">防守圖</td><td><input type="file" id="attackedImg" class="r" accept="image/*"></td></tr>
+                                <tr class="modal-add-items" style="display: none"><td class="r_label">防守圖(1-3張)</td><td><input type="file" id="attackedImg" class="r" accept="image/*" multiple></td></tr>
                                 <tr class="modal-add-items" style="display: none"><td colspan="2"><div id="attacked_img_display" class="attacked-img"></div></td></tr>
                                 <tr class="modal-add-items" style="display: none"><td colspan="2"><button id="modal-add-record">送出</button></td></tr>
                             </table>
@@ -236,9 +238,6 @@
                 </div>
                 <div class="modal-body">
                     <div class="modal-fixed">
-                        <img id="modalAttackedImage" class="attacked-img" src="" alt="">
-                    </div>
-                    <div class="modal-fixed">
                         <table>
                             <thead>
                                 <tr>
@@ -265,6 +264,15 @@
                                 </tr>
                             </tbody>
                         </table>
+                    </div>
+                    <div class="modal-fixed">
+                        <img id="modalAttackedImage" class="attacked-img" src="" alt="">
+                    </div>
+                    <div class="modal-fixed">
+                        <img id="modalAttackedImage1" class="attacked-img" src="" alt="">
+                    </div>
+                    <div class="modal-fixed">
+                        <img id="modalAttackedImage2" class="attacked-img" src="" alt="">
                     </div>
                 </div>
             </div>

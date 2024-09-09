@@ -591,7 +591,12 @@ img {
 
 .attacked-img {
     max-width: 100%;
-    max-height: 300px;
+    max-height: 600px;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    display: block;
+    overflow-y: auto;
 }
 
 .personal_list {
