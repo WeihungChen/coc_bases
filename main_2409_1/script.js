@@ -7,7 +7,9 @@ var current_history = [];
 var tag_spelltower = null;
 var tag_others = null;
 var first = true;
+var sort_categories = [];
 
+document.getElementById('select_base').addEventListener('change', queryBases);
 document.getElementById('imageUpload').addEventListener('change', ImgAdd);
 document.getElementById('btnUpload').addEventListener('click', upload);
 document.getElementById('close').addEventListener('click', closeModal);
@@ -136,7 +138,7 @@ async function Init()
     }
     select_cup2.selectedIndex = select_cup2.options.length - 1;
 
-    const sort_categories = result[1].Sort_Categories;
+    sort_categories = result[1].Sort_Categories;
     const select_sort = document.getElementById('select_sort');
     if(select_sort.innerHTML == '' && sort_categories.length > 0)
     {
@@ -667,6 +669,7 @@ async function queryBases()
         else
             useDT = '~ ' + select_use_date2;
     }
+    document.getElementById('s_sort').innerHTML = "排序: " + sort_categories.find(obj => obj.Index === select_sort).Name;
     document.getElementById('s_use_date').innerHTML = "使用期間: " + useDT;
     document.getElementById('s_tags').innerHTML = "標籤: " + label_tags;
 }
