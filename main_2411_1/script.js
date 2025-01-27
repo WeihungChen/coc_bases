@@ -1332,9 +1332,19 @@ async function upload()
     {
         alert(result[2]);
         const baseidx = bases.findIndex(obj => obj.ID == result[1].ID);
+        if(baseidx == -1)
+        {
+            alert('Can not show different level base!');
+            return;
+        }
         getAndModifyDetail(baseidx);
         document.getElementById('personal_attacked_img_div').style.display = 'none';
         document.getElementById('tabOverAll').dispatchEvent(new Event('click'));
+
+        const modal = document.getElementById('modal');
+        const modalImage = document.getElementById('modalImage');
+        const modalLink = document.getElementById('modal-LK');
+        const modalAdd = document.getElementById('modal-add-record');
         modal.style.display = 'block';
         modalImage.src = bases[baseidx].Pic;
         modalLink.value = baseidx;
